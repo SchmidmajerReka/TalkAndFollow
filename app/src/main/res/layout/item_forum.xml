@@ -50,12 +50,15 @@
 
                 <TextView
                     android:id="@+id/forum_user_name"
-                    android:layout_width="140dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:text="Schmidmajer Réka" />
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="Schmidmajer Schmidmajer Schmidmajer Réka" />
 
                 <ImageView
                     android:id="@+id/forum_up"
@@ -75,6 +78,7 @@
                     android:id="@+id/forum_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
                     android:text="15"/>
 
             </LinearLayout>
