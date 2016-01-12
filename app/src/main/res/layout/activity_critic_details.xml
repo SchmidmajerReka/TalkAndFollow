@@ -21,9 +21,9 @@
         android:layout_marginTop="60dp">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp">
 
@@ -35,11 +35,12 @@
                 android:src="@drawable/profilepic"/>
 
             <LinearLayout
-                android:layout_marginLeft="10dp"
                 android:layout_width="0dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
                 <TextView
                     android:id="@+id/critic_detail_title"
@@ -56,10 +57,10 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="60dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/critic_detail_created_at"
@@ -76,9 +77,10 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_marginRight="10dp">
 
                         <TextView
@@ -100,47 +102,54 @@
                 </LinearLayout>
 
                 <RatingBar
-                    android:isIndicator="true"
                     android:id="@+id/critic_detail_rate"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"/>
             </LinearLayout>
 
 
         </LinearLayout>
         <TextView
-            android:layout_marginLeft="10dp"
             android:id="@+id/critic_detail_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="16sp"
-            android:text="If you can't explain it quickly you don't understand is well enough"
-            android:nestedScrollingEnabled="true" />
+            android:text="If you can't explain it quickly you don't understand is well enough" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:id="@+id/critic_detal_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:src="@drawable/ic_delete_black_36dp"
-                android:text="Delete" />
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="left">
+
+                <ImageView
+                    android:id="@+id/critic_detal_delete"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_delete_black_36dp"
+                    android:text="Delete" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="right">
 
                 <ImageView
-                    android:layout_marginRight="10dp"
-                    android:gravity="right"
                     android:id="@+id/critc_detail_edit"
+                    android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"

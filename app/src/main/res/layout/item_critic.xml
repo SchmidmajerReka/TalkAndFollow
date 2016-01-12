@@ -5,46 +5,44 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/critic_profile_pic"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:src="@drawable/profilepic"/>
 
 
         <LinearLayout
-            android:paddingLeft="10dp"
             android:layout_width="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:paddingLeft="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/critic_title"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"/>
+                android:maxLines="2"
+                android:text="Title" />
 
             <RatingBar
-                android:isIndicator="true"
+                android:id="@+id/critic_ratingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/critic_ratingBar" />
-
-
+                android:isIndicator="true" />
 
         </LinearLayout>
 
@@ -55,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="16sp"
         android:text="If you can't explain it simply you don't understand it well enough."
         android:ellipsize="end"
@@ -65,22 +64,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="10dp"
-        android:paddingTop="10dp"
-        >
+        android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/critic_author"
-            android:layout_width="wrap_content"
-            android:textSize="18sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:text="User"/>
 
         <TextView
             android:id="@+id/critic_time"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="right"
             android:layout_marginRight="10dp"
-            android:layout_height="wrap_content"
             android:text="2hours ago"/>
 
     </LinearLayout>

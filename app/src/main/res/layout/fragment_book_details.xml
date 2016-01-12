@@ -6,8 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/detail_cover"
@@ -21,15 +21,16 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:id="@+id/detail_isbn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textSize="16sp"
                 android:text="ISBN: "/>
 
@@ -37,47 +38,49 @@
                 android:id="@+id/detail_genre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
                 android:textSize="16sp"
                 android:text="Genre: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 android:maxLines="3"
+                android:ellipsize="end"
                 />
 
             <TextView
                 android:id="@+id/detail_pagenum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
                 android:textSize="16sp"
                 android:text="Page number:"/>
 
             <RatingBar
-                android:paddingTop="5dp"
+                android:id="@+id/others_ratingBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:id="@+id/others_ratingBar" />
+                android:paddingTop="5dp"
+                android:isIndicator="true"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <Button
-                    android:paddingLeft="10dp"
+                    android:id="@+id/add_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:visibility="invisible"
-                    android:text="Add to library"
-                    android:id="@+id/add_button" />
+                    android:text="Add to library" />
 
                 <RatingBar
+                    android:id="@+id/my_ratingBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:id="@+id/my_ratingBar" />
+                    android:visibility="invisible" />
 
             </FrameLayout>
 
@@ -90,9 +93,8 @@
         android:id="@+id/detail_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:textSize="16sp"
         android:text="If you can't explain it simply you don't understand it well enough." />
 
