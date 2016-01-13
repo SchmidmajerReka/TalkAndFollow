@@ -9,10 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,8 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     Context context;
     @Bind(R.id.add_button)
     Button add;
+    @Bind(R.id.detail_cover)
+    ImageView detailCover;
     boolean bookAdded;
     Bundle bundle;
     TabMenuActivity activity;
@@ -50,6 +55,12 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         bookAdded = activity.isBookadded();
         isbn.setText("ISBN: " + bundle.getString("isbn"));
         genre.setText("Genre: " + bundle.getString("genre"));
+        String url = bundle.getString("url");
+        if(url!=null) {
+            Picasso.with(context).load(url).into(detailCover);
+        }else{
+            detailCover.setImageResource(R.drawable.bookcover);
+        }
         if(bookAdded) {
             pagenum.setText("Page number: " + bundle.getInt("pageread") + "/" + bundle.getInt("pagenum"));
             myRating.setVisibility(View.VISIBLE);

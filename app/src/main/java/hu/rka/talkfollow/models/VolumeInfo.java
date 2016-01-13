@@ -8,17 +8,21 @@ import java.util.ArrayList;
 public class VolumeInfo {
 
     String title;
-    String subtitle="";
+    String subtitle;
     ArrayList<String> authors;
     String description;
-    ArrayList<IndustryIdentifiers> industryIdentifierses;
-    int pageCount;
+    ArrayList<IndustryIdentifiers> industryIdentifiers;
+    int pageCount = 0;
     ArrayList<String> categories;
-    float averageRating;
-    String medium;
+    float averageRating = 0;
+    ImageLinks imageLinks;
 
     public String getTitle() {
-        return title;
+        if(subtitle!=null){
+            return title + ": " + subtitle;
+        }else{
+            return title;
+        }
     }
 
     public void setTitle(String title) {
@@ -26,14 +30,18 @@ public class VolumeInfo {
     }
 
     public String getAuthors() {
-        String authorInfo = authors.get(0);
-        if(authors.size()>1){
-            for(int i = 1; i<authors.size()-1; i++){
-                authorInfo=authorInfo + ", " + authors.get(i);
+        if(authors!=null) {
+            String authorInfo = authors.get(0);
+            if (authors.size() > 1) {
+                for (int i = 1; i < authors.size() - 1; i++) {
+                    authorInfo = authorInfo + ", " + authors.get(i);
+                }
+                authorInfo = authorInfo + ", " + authors.get(authors.size() - 1);
             }
-            authorInfo = authorInfo + ", " + authors.get(authors.size()-1);
+            return authorInfo;
+        }else{
+            return "Author Unknown";
         }
-        return authorInfo;
     }
 
     public void setAuthors(ArrayList<String> authors) {
@@ -49,23 +57,31 @@ public class VolumeInfo {
     }
 
     public String getIndustryIdentifierses() {
-        if(industryIdentifierses.size()>1){
-            if(industryIdentifierses.get(0).getType() == "ISBN_13"){
-                return industryIdentifierses.get(0).getIdentifier();
-            }else{
-                return industryIdentifierses.get(1).getIdentifier();
+        if(industryIdentifiers!=null) {
+            if (industryIdentifiers.size() >= 1) {
+                if (industryIdentifiers.get(0).getType() == "ISBN_13") {
+                    return industryIdentifiers.get(0).getIdentifier();
+                } else {
+                    return industryIdentifiers.get(1).getIdentifier();
+                }
+            } else {
+                return industryIdentifiers.get(0).getIdentifier();
             }
         }else{
-            return industryIdentifierses.get(0).getIdentifier();
+            return "";
         }
     }
 
-    public void setIndustryIdentifierses(ArrayList<IndustryIdentifiers> industryIdentifierses) {
-        this.industryIdentifierses = industryIdentifierses;
+    public void setIndustryIdentifierses(ArrayList<IndustryIdentifiers> industryIdentifiers) {
+        this.industryIdentifiers = industryIdentifiers;
     }
 
     public String getDescription() {
-        return description;
+        if(description!=null) {
+            return description;
+        }else{
+        return "No Description";
+        }
     }
 
     public void setDescription(String description) {
@@ -80,8 +96,20 @@ public class VolumeInfo {
         this.pageCount = pageCount;
     }
 
-    public ArrayList<String> getCategories() {
-        return categories;
+    public String getCategories() {
+        if(categories!=null){
+            String categoriesAll = categories.get(0);
+            if(categories.size()>1){
+                for (int i=1; i<categories.size()-1; i++) {
+                    categoriesAll = categoriesAll + ", " + categories.get(i);
+                }
+                categoriesAll = categoriesAll + ", " + categories.get(categories.size());
+            }
+            return categoriesAll;
+        }else{
+            return "";
+        }
+
     }
 
     public void setCategories(ArrayList<String> categories) {
@@ -96,11 +124,35 @@ public class VolumeInfo {
         this.averageRating = averageRating;
     }
 
-    public String getMedium() {
-        return medium;
+    public String getImageLinks() {
+        if(imageLinks!=null) {
+            if (imageLinks.getExtraLarge() != null) {
+                return imageLinks.getExtraLarge();
+            } else if (imageLinks.getLarge() != null) {
+                return imageLinks.getLarge();
+            } else if (imageLinks.getMedium() != null) {
+                return imageLinks.getMedium();
+            } else if (imageLinks.getSmall() != null) {
+                return imageLinks.getSmall();
+            } else if (imageLinks.getThumbnail() != null) {
+                return imageLinks.getThumbnail();
+            } else {
+                return imageLinks.getSmallThumbnail();
+            }
+        }else{
+            return null;
+        }
     }
 
-    public void setMedium(String medium) {
-        this.medium = medium;
+    public void setImageLinks(ImageLinks imageLinks) {
+        this.imageLinks = imageLinks;
+    }
+
+    public ArrayList<IndustryIdentifiers> getIndustryIdentifiers() {
+        return industryIdentifiers;
+    }
+
+    public void setIndustryIdentifiers(ArrayList<IndustryIdentifiers> industryIdentifiers) {
+        this.industryIdentifiers = industryIdentifiers;
     }
 }

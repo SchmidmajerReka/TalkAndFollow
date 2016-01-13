@@ -64,7 +64,6 @@ public class MyLibraryActivity extends AppCompatActivity {
             volumeInfo.setCategories(categories);
             volumeInfo.setAverageRating(4);
             Book item = new Book();
-
             item.setVolumeInfo(volumeInfo);
             int randomnumber = rand.nextInt(item.getVolumeInfo().getPageCount())%+1;
             item.setPageRead(randomnumber);
@@ -85,6 +84,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,true);
+            detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
             detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
             detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
             detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
@@ -107,9 +107,6 @@ public class MyLibraryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id){
             case R.id.add_book:
@@ -131,9 +128,5 @@ public class MyLibraryActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
     }
 }

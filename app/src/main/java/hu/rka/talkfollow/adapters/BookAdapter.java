@@ -57,9 +57,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
         Book item = books.get(position);
-
-        //Picasso.with(context).load(item.getUrl()).into(holder.icon);
-        holder.title.setText(item.getVolumeInfo().getTitle() + ": " + item.getVolumeInfo().getSubtitle());
+        if(item.getVolumeInfo().getImageLinks()!=null) {
+            Picasso.with(context).load(item.getVolumeInfo().getImageLinks()).into(holder.cover);
+        }else{
+            holder.cover.setImageResource(R.drawable.bookcover);
+        }
+        holder.title.setText(item.getVolumeInfo().getTitle());
         holder.author.setText(item.getVolumeInfo().getAuthors());
         if(flag == true){
             holder.forumIcon.setVisibility(View.VISIBLE);
@@ -80,6 +83,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,true);
             detailIntent.putExtra("starter", 3);
+            detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
             detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
             detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
             detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
@@ -138,7 +142,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
-                int res = String.CASE_INSENSITIVE_ORDER.compare((lhs.getVolumeInfo().getTitle() + ": " + lhs.getVolumeInfo().getSubtitle()), (rhs.getVolumeInfo().getTitle() + ": " + rhs.getVolumeInfo().getSubtitle()));
+                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getVolumeInfo().getTitle(), rhs.getVolumeInfo().getTitle());
                 return res;
             }
         });

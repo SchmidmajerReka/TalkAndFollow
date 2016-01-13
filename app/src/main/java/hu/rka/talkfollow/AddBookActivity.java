@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -19,6 +20,7 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -38,6 +40,8 @@ public class AddBookActivity extends AppCompatActivity {
     private Context context;
     @Bind(R.id.offer_book_list)
     ListView offerBookList;
+    @Bind(R.id.search_help_text)
+    TextView helpText;
     Random rand = new Random();
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
 
@@ -73,9 +77,8 @@ public class AddBookActivity extends AppCompatActivity {
         boolean showChat = false;
         bookAdapter.setBook(items, showChat);*/
         offerBookList.setAdapter(bookAdapter);
-        GetBookRequest getDataRequest = new GetBookRequest("9789636897079");
+        GetBookRequest getDataRequest = new GetBookRequest("9781780891286");
         spiceManager.execute(getDataRequest, new DataRequestListener());
-
         offerBookList.setOnItemClickListener(listItemClick);
     }
 
@@ -85,6 +88,7 @@ public class AddBookActivity extends AppCompatActivity {
             Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,false);
+            detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
             detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
             detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
             detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
@@ -116,10 +120,14 @@ public class AddBookActivity extends AppCompatActivity {
         @Override
         public void onRequestSuccess(BookResults result) {
             ArrayList<Book> items = result.getItems();
-            Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
+            if (items != null){
+                Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
             boolean showChat = false;
             bookAdapter.setBook(items, showChat);
-
+            }else{
+                Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
+                helpText.setText("Since ISBN numbers are country specific, there is a chance that the book you are looking for is not available on that language according to google.books. you can try to find the book by author or title");
+            }
         }
     }
 
@@ -135,8 +143,8 @@ public class AddBookActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Scanned");
                 GetBookRequest getDataRequest = new GetBookRequest(result.getContents());
                 spiceManager.execute(getDataRequest, new DataRequestListener());
+                helpText.setText("");
                 //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

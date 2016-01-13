@@ -18,6 +18,6 @@ public class GetBookRequest  extends RetrofitSpiceRequest<BookResults, ContentIn
 
     @Override
     public BookResults loadDataFromNetwork() throws Exception {
-        return getService().getBookbyISBN("isbn:213235","AIzaSyDR0UjdaBWHcXBvBzG88Y4So4o9JeAVhr8");
+        return getService().getBookbyISBN("isbn:" + isbn, "AIzaSyDR0UjdaBWHcXBvBzG88Y4So4o9JeAVhr8");
     }
 }
