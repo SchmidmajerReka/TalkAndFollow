@@ -4,6 +4,7 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.08..
  */
 public class Book {
+    String id;
     String author;
     String title;
     String url;
