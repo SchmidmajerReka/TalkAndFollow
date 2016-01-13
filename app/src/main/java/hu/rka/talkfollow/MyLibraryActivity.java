@@ -18,6 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.models.IndustryIdentifiers;
+import hu.rka.talkfollow.models.VolumeInfo;
 
 /**
  * Created by Réka on 2016.01.08..
@@ -43,19 +45,30 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         ArrayList<Book> items = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
+            IndustryIdentifiers industryIdentifiers = new IndustryIdentifiers();
+            industryIdentifiers.setType("ISBN_13");
+            industryIdentifiers.setIdentifier("123456789");
+            ArrayList<IndustryIdentifiers> industryIdentifiersArray = new ArrayList<>();
+            industryIdentifiersArray.add(industryIdentifiers);
+            VolumeInfo volumeInfo = new VolumeInfo();
+            volumeInfo.setTitle("Title: " + (100 - i));
+            ArrayList<String> authors = new ArrayList<>();
+            authors.add("Title: " + (100 - i));
+            volumeInfo.setAuthors(authors);
+            volumeInfo.setDescription("If you can't explain it simply you don't understand it well enough");
+            volumeInfo.setIndustryIdentifierses(industryIdentifiersArray);
+            volumeInfo.setPageCount(165);
+            ArrayList<String> categories = new ArrayList<>();
+            categories.add("Romantic");
+            categories.add("Sci-fi");
+            volumeInfo.setCategories(categories);
+            volumeInfo.setAverageRating(4);
             Book item = new Book();
-            item.setTitle("Title: " + (100 - i));
-            item.setAuthor("Author: " + (100 - i));
-            item.setUrl("something");
-            item.setIsbn("123456789");
-            item.setGenre("Romantic, Sci-fi, Crimi");
-            item.setPageNum(100 + i);
-            int randomnumber = rand.nextInt(item.getPageNum())%+1;
-            item.setPageRead(randomnumber);
-            item.setOtherRating(4);
-            item.setMyRating(5);
-            item.setDescription("If you can't explain it simply you don't understand it well enough");
 
+            item.setVolumeInfo(volumeInfo);
+            int randomnumber = rand.nextInt(item.getVolumeInfo().getPageCount())%+1;
+            item.setPageRead(randomnumber);
+            item.setMyRating(5);
             items.add(item);
         }
         boolean showChat=true;
@@ -72,15 +85,15 @@ public class MyLibraryActivity extends AppCompatActivity {
             Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,true);
-            detailIntent.putExtra("title", item.getTitle());
-            detailIntent.putExtra("author", item.getAuthor());
-            detailIntent.putExtra("isbn", item.getIsbn());
-            detailIntent.putExtra("genre", item.getGenre());
-            detailIntent.putExtra("pagenum", item.getPageNum());
+            detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
+            detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
+            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
+            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
             detailIntent.putExtra("pageread", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getOtherRating());
+            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getDescription());
+            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
         }
     };

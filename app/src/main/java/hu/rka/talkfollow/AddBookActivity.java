@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +26,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.GetBookRequest;
+import hu.rka.talkfollow.results.BookResults;
 
 /**
  * Created by Réka on 2016.01.09..
@@ -33,6 +39,7 @@ public class AddBookActivity extends AppCompatActivity {
     @Bind(R.id.offer_book_list)
     ListView offerBookList;
     Random rand = new Random();
+    private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,7 @@ public class AddBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bookAdapter = new BookAdapter(context, 0);
 
-        ArrayList<Book> items = new ArrayList<>();
+        /*ArrayList<Book> items = new ArrayList<>();
         for (int i = 25; i < 40; i++) {
             Book item = new Book();
             item.setTitle("Title: " + (100 - i));
@@ -64,8 +71,11 @@ public class AddBookActivity extends AppCompatActivity {
         }
 
         boolean showChat = false;
-        bookAdapter.setBook(items, showChat);
+        bookAdapter.setBook(items, showChat);*/
         offerBookList.setAdapter(bookAdapter);
+        GetBookRequest getDataRequest = new GetBookRequest("9789636897079");
+        spiceManager.execute(getDataRequest, new DataRequestListener());
+
         offerBookList.setOnItemClickListener(listItemClick);
     }
 
@@ -75,15 +85,15 @@ public class AddBookActivity extends AppCompatActivity {
             Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,false);
-            detailIntent.putExtra("title", item.getTitle());
-            detailIntent.putExtra("author", item.getAuthor());
-            detailIntent.putExtra("isbn", item.getIsbn());
-            detailIntent.putExtra("genre", item.getGenre());
-            detailIntent.putExtra("pagenum", item.getPageNum());
+            detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
+            detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
+            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
+            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
             detailIntent.putExtra("pageread", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getOtherRating());
+            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getDescription());
+            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
         }
     };
@@ -95,6 +105,25 @@ public class AddBookActivity extends AppCompatActivity {
         return true;
     }
 
+    public final class DataRequestListener implements
+            RequestListener<BookResults> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(BookResults result) {
+            ArrayList<Book> items = result.getItems();
+            Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
+            boolean showChat = false;
+            bookAdapter.setBook(items, showChat);
+
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -104,11 +133,15 @@ public class AddBookActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                GetBookRequest getDataRequest = new GetBookRequest(result.getContents());
+                spiceManager.execute(getDataRequest, new DataRequestListener());
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+
     }
 
     @Override
@@ -130,5 +163,20 @@ public class AddBookActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop(); //nem számít előrébb van-e, de Gyula így szokta
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        spiceManager.start(context);
+
+    }
+
+
 }
 

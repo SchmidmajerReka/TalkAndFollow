@@ -9,13 +9,9 @@ import hu.rka.talkfollow.models.Book;
  */
 public class BookResults {
 
-    ArrayList<Book> books;
+    ArrayList<Book> items;
 
-    public ArrayList<Book> getBooks(){
-        return books;
-    }
-
-    public void setBooks(ArrayList<Book> books){
-        this.books = books;
+    public ArrayList<Book> getItems(){
+        return items;
     }
 }

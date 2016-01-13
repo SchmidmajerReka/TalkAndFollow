@@ -44,7 +44,7 @@ public class SearchActivity extends AppCompatActivity {
 
         ArrayList<Book> items = new ArrayList<>();
         for (int i = 40; i < 42; i++) {
-            Book item = new Book();
+           /* Book item = new Book();
             item.setTitle("Title: " + (100 - i));
             item.setAuthor("Author: " + (100 - i));
             item.setUrl("something");
@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
             item.setOtherRating(4);
             item.setMyRating(5);
             item.setDescription("If you can't explain it simply you don't understand it well enough");
-            items.add(item);
+            items.add(item);*/
         }
         boolean showChat = false;
         bookAdapter.setBook(items, showChat);
@@ -72,15 +72,15 @@ public class SearchActivity extends AppCompatActivity {
             Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,false);
-            detailIntent.putExtra("title", item.getTitle());
-            detailIntent.putExtra("author", item.getAuthor());
-            detailIntent.putExtra("isbn", item.getIsbn());
-            detailIntent.putExtra("genre", item.getGenre());
-            detailIntent.putExtra("pagenum", item.getPageNum());
+            detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
+            detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
+            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
+            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
             detailIntent.putExtra("pageread", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getOtherRating());
+            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getDescription());
+            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
         }
     };

@@ -59,8 +59,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Book item = books.get(position);
 
         //Picasso.with(context).load(item.getUrl()).into(holder.icon);
-        holder.title.setText(item.getTitle());
-        holder.author.setText(item.getAuthor());
+        holder.title.setText(item.getVolumeInfo().getTitle() + ": " + item.getVolumeInfo().getSubtitle());
+        holder.author.setText(item.getVolumeInfo().getAuthors());
         if(flag == true){
             holder.forumIcon.setVisibility(View.VISIBLE);
             holder.forumIcon.setTag(position);
@@ -80,15 +80,15 @@ public class BookAdapter extends ArrayAdapter<Book> {
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,true);
             detailIntent.putExtra("starter", 3);
-            detailIntent.putExtra("title", item.getTitle());
-            detailIntent.putExtra("author", item.getAuthor());
-            detailIntent.putExtra("isbn", item.getIsbn());
-            detailIntent.putExtra("genre", item.getGenre());
-            detailIntent.putExtra("pagenum", item.getPageNum());
+            detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
+            detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
+            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
+            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
             detailIntent.putExtra("pageread", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getOtherRating());
+            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getDescription());
+            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
 
             //Toast.makeText(context, "Icon position: " + position, Toast.LENGTH_LONG).show();
@@ -104,7 +104,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
     public int getfinished(){
         int finished=0;
         for(int i=0; i<books.size(); i++){
-            if(books.get(i).getPageRead() == books.get(i).getPageNum()){
+            if(books.get(i).getPageRead() == books.get(i).getVolumeInfo().getPageCount()){
                 finished++;
             }
         }
@@ -126,7 +126,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
-                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getAuthor(), rhs.getAuthor());
+                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getVolumeInfo().getAuthors(), rhs.getVolumeInfo().getAuthors());
                 return res;
                 // /return lhs.getAuthor().compareToIgnoreCase(rhs.getAuthor());
             }
@@ -138,16 +138,14 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
-                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getAuthor(), rhs.getAuthor());
+                int res = String.CASE_INSENSITIVE_ORDER.compare((lhs.getVolumeInfo().getTitle() + ": " + lhs.getVolumeInfo().getSubtitle()), (rhs.getVolumeInfo().getTitle() + ": " + rhs.getVolumeInfo().getSubtitle()));
                 return res;
-                // /return lhs.getAuthor().compareToIgnoreCase(rhs.getAuthor());
             }
         });
         notifyDataSetChanged();
     }
 
     public Book getBook(int position) {
-        // Hibakezelés, milyen hiba lehet?
         return
                 books.get(position);
     }
