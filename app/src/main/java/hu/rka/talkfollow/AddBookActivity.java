@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.models.IndustryIdentifiers;
+import hu.rka.talkfollow.models.VolumeInfo;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.GetBookRequest;
 import hu.rka.talkfollow.results.BookResults;
@@ -46,6 +49,7 @@ public class AddBookActivity extends AppCompatActivity {
     TextView helpText;
     Random rand = new Random();
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
+    ArrayList<Book> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,35 +62,40 @@ public class AddBookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add to Library");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bookAdapter = new BookAdapter(context, 0);
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(context, "Search phrase: " + query, Toast.LENGTH_LONG).show();
-            //doMySearch(query);
-        }
 
-        /*ArrayList<Book> items = new ArrayList<>();
-        for (int i = 25; i < 40; i++) {
+        for (int i = 90; i < 98; i++) {
+            IndustryIdentifiers industryIdentifiers = new IndustryIdentifiers();
+            industryIdentifiers.setType("ISBN_13");
+            industryIdentifiers.setIdentifier("123456789");
+            ArrayList<IndustryIdentifiers> industryIdentifiersArray = new ArrayList<>();
+            industryIdentifiersArray.add(industryIdentifiers);
+            VolumeInfo volumeInfo = new VolumeInfo();
+            volumeInfo.setTitle("Title: " + (100 - i));
+            ArrayList<String> authors = new ArrayList<>();
+            authors.add("Title: " + (100 - i));
+            volumeInfo.setAuthors(authors);
+            volumeInfo.setDescription("If you can't explain it simply you don't understand it well enough");
+            volumeInfo.setIndustryIdentifierses(industryIdentifiersArray);
+            volumeInfo.setPageCount(165);
+            ArrayList<String> categories = new ArrayList<>();
+            categories.add("Romantic");
+            categories.add("Sci-fi");
+            volumeInfo.setCategories(categories);
+            volumeInfo.setAverageRating(4);
             Book item = new Book();
-            item.setTitle("Title: " + (100 - i));
-            item.setAuthor("Author: " + (100 - i));
-            item.setUrl("something");
-            item.setIsbn("123456789");
-            item.setGenre("Romantic, Sci-fi, Crimi");
-            item.setPageNum(100 + i);
-            int randomnumber = rand.nextInt(item.getPageNum())%+1;
+            item.setVolumeInfo(volumeInfo);
+            int randomnumber = rand.nextInt(item.getVolumeInfo().getPageCount())%+1;
             item.setPageRead(randomnumber);
-            item.setOtherRating(4);
             item.setMyRating(5);
-            item.setDescription("If you can't explain it simply you don't understand it well enough");
             items.add(item);
         }
 
         boolean showChat = false;
-        bookAdapter.setBook(items, showChat);*/
-        offerBookList.setAdapter(bookAdapter);
         GetBookRequest getDataRequest = new GetBookRequest("9781780891286");
         spiceManager.execute(getDataRequest, new DataRequestListener());
+        bookAdapter.setBook(items, showChat);
+        offerBookList.setAdapter(bookAdapter);
+
         offerBookList.setOnItemClickListener(listItemClick);
     }
 
@@ -113,10 +122,30 @@ public class AddBookActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_book, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            // Ha a keresés gombra kattintott a billentyuzeten akkor fut le.
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(context, "Search phrase: " + query, Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            // Ha megváltozott a keresőben a szöveg akkor fut le.
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Toast.makeText(context, "Text changed: " + query, Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
 
         return true;
-    }
+    };
+
+
 
     public final class DataRequestListener implements
             RequestListener<BookResults> {
@@ -128,11 +157,14 @@ public class AddBookActivity extends AppCompatActivity {
 
         @Override
         public void onRequestSuccess(BookResults result) {
-            ArrayList<Book> items = result.getItems();
-            if (items != null){
+            ArrayList<Book> itemstmp = result.getItems();
+            if (itemstmp != null){
                 Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
-            boolean showChat = false;
-            bookAdapter.setBook(items, showChat);
+                boolean showChat = false;
+                for(int i=0; i<itemstmp.size(); i++){
+                    items.add(itemstmp.get(i));
+                }
+                bookAdapter.setBook(items, showChat);
             }else{
                 Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
                 helpText.setText("Since ISBN numbers are country specific, there is a chance that the book you are looking for is not available on that language according to google.books. you can try to find the book by author or title");

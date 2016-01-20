@@ -16,14 +16,12 @@ import hu.rka.talkfollow.ReadersListFrag;
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     int starter;
+    public static String titles[] = {"Book details", "Critics", "Readers", "Forum"};
+
     public TabPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
-        this.starter = starter;
-
     }
-
-
 
     @Override
     public Fragment getItem(int i) {
@@ -40,29 +38,16 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                 default:
                     return new BookDetailsFrag();
             }
-
     }
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
-        return mNumOfTabs; //No of Tabs
+        return mNumOfTabs;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
-            case 0:
-                return "Book details";
-            case 1:
-                return "Critics";
-            case 2:
-                return "Readers";
-            case 3:
-                return "Forum";
-            default:
-                return "Page " + position;
-        }
+        return titles[position];
     }
 
 }
