@@ -1,9 +1,11 @@
 package hu.rka.talkfollow;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -56,6 +58,12 @@ public class AddBookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add to Library");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bookAdapter = new BookAdapter(context, 0);
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Toast.makeText(context, "Search phrase: " + query, Toast.LENGTH_LONG).show();
+            //doMySearch(query);
+        }
 
         /*ArrayList<Book> items = new ArrayList<>();
         for (int i = 25; i < 40; i++) {
@@ -91,10 +99,8 @@ public class AddBookActivity extends AppCompatActivity {
             detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
             detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
             detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
-            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
-            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
-            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
-            detailIntent.putExtra("pageread", item.getPageRead());
+            detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("bookmark", item.getPageRead());
             detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
             detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
@@ -106,6 +112,9 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_book, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+
         return true;
     }
 
@@ -156,10 +165,10 @@ public class AddBookActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
-            case R.id.search:
-                Intent detailIntent = new Intent(context, SearchActivity.class);
-                context.startActivity(detailIntent);
-                //Toast.makeText(context, "Search book", Toast.LENGTH_LONG).show();
+            case R.id.action_search:
+                //Intent detailIntent = new Intent(context, LoginActivity.class);
+                //context.startActivity(detailIntent);
+                Toast.makeText(context, "Search book", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.barcode:
                 new IntentIntegrator(this).initiateScan();
@@ -175,7 +184,7 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         spiceManager.shouldStop();
-        super.onStop(); //nem számít előrébb van-e, de Gyula így szokta
+        super.onStop();
     }
 
     @Override

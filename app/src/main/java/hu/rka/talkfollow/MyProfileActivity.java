@@ -1,12 +1,16 @@
 package hu.rka.talkfollow;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Bind(R.id.book_finished) TextView bookFinished;
     @Bind(R.id.about_me) TextView aboutMe;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,40 +57,47 @@ public class MyProfileActivity extends AppCompatActivity {
 
         }
         aboutMe.setText("Short introduction about me...");
-        aboutMe.setOnClickListener(textClick);
     }
 
-    private View.OnClickListener textClick=new View.OnClickListener(){
 
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(context, "Edit text", Toast.LENGTH_LONG).show();
-        }
-    };
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_empty, menu);
+        getMenuInflater().inflate(R.menu.menu_my_profile, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if(id == android.R.id.home){
-            this.finish();
+
+        switch (item.getItemId()){
+            case  android.R.id.home:
+                this.finish();
+                return true;
+            case R.id.edit_aboutme:
+
+                final Dialog aboutMeDialog = new Dialog(context);
+                aboutMeDialog.setContentView(R.layout.dialog_about_me);
+                aboutMeDialog.setTitle("About Me: ");
+                Button setAboutMe = (Button) aboutMeDialog.findViewById(R.id.edit_about_me_confirm);
+                final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
+                editText.setText(aboutMe.getText());
+
+                setAboutMe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
+                        aboutMe.setText(editText.getText());
+                        Toast.makeText(context, "AboutMe changed", Toast.LENGTH_LONG).show();
+                        aboutMeDialog.dismiss();
+                    }
+                });
+                aboutMeDialog.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
     }
 }

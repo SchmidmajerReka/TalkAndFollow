@@ -69,7 +69,6 @@ public class ForumFrag extends android.support.v4.app.Fragment {
                 final Dialog writeMessageDialog = new Dialog(context);
                 writeMessageDialog.setContentView(R.layout.dialog_write_message);
                 writeMessageDialog.setTitle("Message: ");
-
                 Button sendMessage = (Button) writeMessageDialog.findViewById(R.id.send_forum_message);
                 sendMessage.setOnClickListener(new View.OnClickListener() {
                     @Override

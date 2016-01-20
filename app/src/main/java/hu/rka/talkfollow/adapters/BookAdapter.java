@@ -86,16 +86,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
             detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
             detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
             detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
-            detailIntent.putExtra("isbn", item.getVolumeInfo().getIndustryIdentifierses());
-            detailIntent.putExtra("genre", item.getVolumeInfo().getCategories());
-            detailIntent.putExtra("pagenum", item.getVolumeInfo().getPageCount());
-            detailIntent.putExtra("pageread", item.getPageRead());
+            detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("bookmark", item.getPageRead());
             detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
             detailIntent.putExtra("myrating", item.getMyRating());
             detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
-
-            //Toast.makeText(context, "Icon position: " + position, Toast.LENGTH_LONG).show();
         }
     };
 

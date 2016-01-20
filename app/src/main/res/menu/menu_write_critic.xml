@@ -3,5 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".TabMenuActivity">
 
+    <item android:id="@+id/critic_send"
+        android:title="Send"
+        app:showAsAction="always" />
 
 </menu>

@@ -103,7 +103,7 @@ public class VolumeInfo {
                 for (int i=1; i<categories.size()-1; i++) {
                     categoriesAll = categoriesAll + ", " + categories.get(i);
                 }
-                categoriesAll = categoriesAll + ", " + categories.get(categories.size());
+                categoriesAll = categoriesAll + ", " + categories.get(categories.size()-1);
             }
             return categoriesAll;
         }else{

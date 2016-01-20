@@ -110,55 +110,20 @@
 
 
         </LinearLayout>
-        <TextView
-            android:id="@+id/critic_detail_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textSize="16sp"
-            android:text="If you can't explain it quickly you don't understand is well enough" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/critic_detail_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left">
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:text="If you can't explain it quickly you don't understand is well enough" />
 
-                <ImageView
-                    android:id="@+id/critic_detal_delete"
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:src="@drawable/ic_delete_black_36dp"
-                    android:text="Delete" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:gravity="right">
-
-                <ImageView
-                    android:id="@+id/critc_detail_edit"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:text="Edit"
-                    android:src="@drawable/ic_edit_black_36dp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
