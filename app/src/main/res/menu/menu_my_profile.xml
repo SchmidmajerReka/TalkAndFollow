@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".TabMenuActivity">
 
     <item android:id="@+id/edit_aboutme"
-        android:icon="@drawable/ic_edit_black_36dp"
+        android:icon="@drawable/ic_edit_white_36dp"
         android:title="Edit"
         app:showAsAction="always" />
 

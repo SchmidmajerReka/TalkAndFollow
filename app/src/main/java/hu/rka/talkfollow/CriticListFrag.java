@@ -41,7 +41,7 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
         criticAdapter = new CriticAdapter(getActivity(), 0);
         bookAdded=activity.isBookadded();
         ArrayList<Critic> items = new ArrayList<>();
-
+        /*
         Critic item = new Critic();
         item.setTitle("Saját Kritikám");
         item.setAuthor("Én");
@@ -63,7 +63,7 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
             item.setMine(false);
             items.add(item);
         }
-
+        */
         criticAdapter.setCritic(items);
         listView.setAdapter(criticAdapter);
         listView.setOnItemClickListener(listItemClick);
@@ -73,7 +73,7 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Critic item = criticAdapter.getCritic(position);
+            /*Critic item = criticAdapter.getCritic(position);
             Intent detailIntent = new Intent(context, CriticDetailsActivity.class);
             detailIntent.putExtra("title", item.getTitle());
             detailIntent.putExtra("author", item.getAuthor());
@@ -84,7 +84,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
             detailIntent.putExtra("booktitle", bundle.getString("title"));
             detailIntent.putExtra("mine", item.isMine());
 
-            context.startActivity(detailIntent);
+            context.startActivity(detailIntent);*/
+            Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
         }
     };
 

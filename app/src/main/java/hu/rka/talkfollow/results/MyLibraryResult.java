@@ -7,11 +7,11 @@ import hu.rka.talkfollow.models.Book;
 /**
  * Created by Réka on 2016.01.13..
  */
-public class BookResults {
+public class MyLibraryResult {
 
-    ArrayList<Book> items;
+    ArrayList<Book> books;
 
     public ArrayList<Book> getItems(){
-        return items;
+        return books;
     }
 }

@@ -15,8 +15,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.GetMyLibraryRequest;
+import hu.rka.talkfollow.requests.GetMyProfileRequest;
+import hu.rka.talkfollow.results.MyLibraryResult;
+import hu.rka.talkfollow.results.MyProfileResult;
 
 /**
  * Created by Réka on 2016.01.09..
@@ -26,6 +38,7 @@ public class MyProfileActivity extends AppCompatActivity {
     int bookNum;
     int finished;
     String description;
+    private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
 
 
     @Bind(R.id.profile_pic)
@@ -46,7 +59,7 @@ public class MyProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("My Profile");
-        Bundle bundle = getIntent().getExtras();
+        /*Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             bookNum = bundle.getInt("booknum");
             if(bookNum!=0){
@@ -57,8 +70,44 @@ public class MyProfileActivity extends AppCompatActivity {
 
         }
         aboutMe.setText("Short introduction about me...");
+        */
+        GetMyProfileRequest getDataRequest = new GetMyProfileRequest();
+        spiceManager.execute(getDataRequest, new DataRequestListener());
     }
 
+
+
+    public final class DataRequestListener implements
+            RequestListener<MyProfileResult> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(MyProfileResult result) {
+
+            Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
+            Picasso.with(context).load(result.getPicture()).placeholder(R.drawable.profilepic).into(profilePic);
+            bookNumView.setText("Number of books: " + result.getBooks_number());
+            bookFinished.setText("Finished: " + result.getFinished());
+            aboutMe.setText(result.getAbout_me());
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        spiceManager.start(context);
+
+    }
 
 
 

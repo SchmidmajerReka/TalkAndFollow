@@ -38,14 +38,14 @@ public class ForumFrag extends android.support.v4.app.Fragment {
             TabMenuActivity activity = (TabMenuActivity) getActivity();
             forumAdapter = new ForumAdapter(getActivity(), 0);
             ArrayList<ForumMessage> items = new ArrayList<>();
-            for (int i = 0; i < 15; i++) {
+            /*for (int i = 0; i < 15; i++) {
             ForumMessage item = new ForumMessage();
             item.setAuthor("Author " + i);
             item.setMessageText("If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough.");
             item.setVoteCount(15);
             items.add(item);
             }
-
+            */
             forumAdapter.setForumMessages(items);
             listView.setAdapter(forumAdapter);
             return v;
@@ -83,8 +83,4 @@ public class ForumFrag extends android.support.v4.app.Fragment {
             return super.onOptionsItemSelected(item);
             }
     }
-
-
-
-
 }

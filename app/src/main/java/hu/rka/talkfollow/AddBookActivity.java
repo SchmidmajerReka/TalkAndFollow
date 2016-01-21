@@ -1,6 +1,5 @@
 package hu.rka.talkfollow;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -31,11 +29,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
-import hu.rka.talkfollow.models.IndustryIdentifiers;
-import hu.rka.talkfollow.models.VolumeInfo;
 import hu.rka.talkfollow.network.ContentSpiceService;
-import hu.rka.talkfollow.requests.GetBookRequest;
-import hu.rka.talkfollow.results.BookResults;
+import hu.rka.talkfollow.requests.GetMyLibraryRequest;
+import hu.rka.talkfollow.results.MyLibraryResult;
 
 /**
  * Created by Réka on 2016.01.09..
@@ -62,7 +58,7 @@ public class AddBookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add to Library");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bookAdapter = new BookAdapter(context, 0);
-
+        /*
         for (int i = 90; i < 98; i++) {
             IndustryIdentifiers industryIdentifiers = new IndustryIdentifiers();
             industryIdentifiers.setType("ISBN_13");
@@ -72,7 +68,7 @@ public class AddBookActivity extends AppCompatActivity {
             VolumeInfo volumeInfo = new VolumeInfo();
             volumeInfo.setTitle("Title: " + (100 - i));
             ArrayList<String> authors = new ArrayList<>();
-            authors.add("Title: " + (100 - i));
+            authors.add("Author: " + (100 - i));
             volumeInfo.setAuthors(authors);
             volumeInfo.setDescription("If you can't explain it simply you don't understand it well enough");
             volumeInfo.setIndustryIdentifierses(industryIdentifiersArray);
@@ -89,20 +85,21 @@ public class AddBookActivity extends AppCompatActivity {
             item.setMyRating(5);
             items.add(item);
         }
-
+        */
         boolean showChat = false;
-        GetBookRequest getDataRequest = new GetBookRequest("9781780891286");
+        GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
         bookAdapter.setBook(items, showChat);
         offerBookList.setAdapter(bookAdapter);
-
         offerBookList.setOnItemClickListener(listItemClick);
     }
 
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Book item = bookAdapter.getBook(position);
+            Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
+        }
+        /*    Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,false);
             detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
@@ -114,7 +111,7 @@ public class AddBookActivity extends AppCompatActivity {
             detailIntent.putExtra("myrating", item.getMyRating());
             detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
             context.startActivity(detailIntent);
-        }
+        }*/
     };
 
 
@@ -148,7 +145,7 @@ public class AddBookActivity extends AppCompatActivity {
 
 
     public final class DataRequestListener implements
-            RequestListener<BookResults> {
+            RequestListener<MyLibraryResult> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -156,7 +153,7 @@ public class AddBookActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onRequestSuccess(BookResults result) {
+        public void onRequestSuccess(MyLibraryResult result) {
             ArrayList<Book> itemstmp = result.getItems();
             if (itemstmp != null){
                 Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
@@ -182,10 +179,10 @@ public class AddBookActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
-                GetBookRequest getDataRequest = new GetBookRequest(result.getContents());
-                spiceManager.execute(getDataRequest, new DataRequestListener());
+                //GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest(result.getContents());
+                //spiceManager.execute(getDataRequest, new DataRequestListener());
                 helpText.setText("");
-                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

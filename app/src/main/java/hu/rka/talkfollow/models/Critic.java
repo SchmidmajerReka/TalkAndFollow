@@ -4,21 +4,31 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.09..
  */
 public class Critic {
-    String author;
+    int id;
+    String user_name;
     String title;
-    String criticText;
-    float rate;
-    String url;
-    String createdTime;
-    String updatedTime;
+    String critic;
+    float rating;
+    String user_picture;
+    String time;
+    long created_at;
+    long updated_at;
     boolean mine;
 
-    public String getAuthor() {
-        return author;
+    public int getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getTitle() {
@@ -29,44 +39,52 @@ public class Critic {
         this.title = title;
     }
 
-    public String getCriticText() {
-        return criticText;
+    public String getCritic() {
+        return critic;
     }
 
-    public void setCriticText(String criticText) {
-        this.criticText = criticText;
+    public void setCritic(String critic) {
+        this.critic = critic;
     }
 
-    public float getRate() {
-        return rate;
+    public float getRating() {
+        return rating;
     }
 
-    public void setRate(float rate) {
-        this.rate = rate;
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUser_picture() {
+        return user_picture;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUser_picture(String user_picture) {
+        this.user_picture = user_picture;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getUpdatedTime() {
-        return updatedTime;
+    public long getCreated_at() {
+        return created_at;
     }
 
-    public void setUpdatedTime(String updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setCreated_at(long created_at) {
+        this.created_at = created_at;
+    }
+
+    public long getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(long updated_at) {
+        this.updated_at = updated_at;
     }
 
     public boolean isMine() {

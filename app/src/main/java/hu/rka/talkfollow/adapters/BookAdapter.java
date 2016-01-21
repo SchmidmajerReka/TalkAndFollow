@@ -56,14 +56,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        Book item = books.get(position);
-        if(item.getVolumeInfo().getImageLinks()!=null) {
-            Picasso.with(context).load(item.getVolumeInfo().getImageLinks()).into(holder.cover);
-        }else{
-            holder.cover.setImageResource(R.drawable.bookcover);
-        }
-        holder.title.setText(item.getVolumeInfo().getTitle());
-        holder.author.setText(item.getVolumeInfo().getAuthors());
+        Book book = books.get(position);
+
+        Picasso.with(context).load(book.getPicture()).placeholder(R.drawable.profilepic).into(holder.cover);
+
+        holder.title.setText(book.getTitle());
+        holder.author.setText(book.getAuthors());
         if(flag == true){
             holder.forumIcon.setVisibility(View.VISIBLE);
             holder.forumIcon.setTag(position);
@@ -79,18 +77,18 @@ public class BookAdapter extends ArrayAdapter<Book> {
         @Override
         public void onClick(View v) {
             int position=(Integer)v.getTag();
-            Book item = books.get(position);
+            Book book = books.get(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("added" ,true);
             detailIntent.putExtra("starter", 3);
-            detailIntent.putExtra("url", item.getVolumeInfo().getImageLinks());
-            detailIntent.putExtra("title", item.getVolumeInfo().getTitle());
-            detailIntent.putExtra("author", item.getVolumeInfo().getAuthors());
-            detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
-            detailIntent.putExtra("bookmark", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
-            detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
+            detailIntent.putExtra("url", book.getPicture());
+            detailIntent.putExtra("title", book.getTitle());
+            detailIntent.putExtra("author", book.getAuthors());
+            detailIntent.putExtra("tags", book.getTags());
+            detailIntent.putExtra("bookmark", book.getBookmark());
+            detailIntent.putExtra("otherrating", book.getAverage_rating());
+            detailIntent.putExtra("myrating", book.getMy_rating());
+            detailIntent.putExtra("description", book.getDescription());
             context.startActivity(detailIntent);
         }
     };
@@ -101,15 +99,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         notifyDataSetChanged();
     }
 
-    public int getfinished(){
-        int finished=0;
-        for(int i=0; i<books.size(); i++){
-            if(books.get(i).getPageRead() == books.get(i).getVolumeInfo().getPageCount()){
-                finished++;
-            }
-        }
-        return finished;
-    }
+
     static class ViewHolder {
         @Bind(R.id.book_author)
         TextView author;
@@ -126,9 +116,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
-                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getVolumeInfo().getAuthors(), rhs.getVolumeInfo().getAuthors());
+                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getAuthors(), rhs.getAuthors());
                 return res;
-                // /return lhs.getAuthor().compareToIgnoreCase(rhs.getAuthor());
             }
         });
         notifyDataSetChanged();
@@ -138,7 +127,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
-                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getVolumeInfo().getTitle(), rhs.getVolumeInfo().getTitle());
+                int res = String.CASE_INSENSITIVE_ORDER.compare(lhs.getTitle(), rhs.getTitle());
                 return res;
             }
         });

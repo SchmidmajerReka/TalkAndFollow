@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -51,13 +53,16 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         }
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        ForumMessage item = forumMessages.get(position);
-        holder.forumUserName.setText(item.getAuthor());
-        holder.messageText.setText(item.getMessageText());
-        holder.voteCount.setText(String.valueOf(item.getVoteCount()));
+        ForumMessage message = forumMessages.get(position);
+        holder.forumUserName.setText(message.getUser_name());
+        holder.messageText.setText(message.getMessage());
+        holder.voteCount.setText(String.valueOf(message.getApproval_count()));
         holder.report.setOnClickListener(reportClick);
         holder.upVote.setOnClickListener(upClick);
         holder.downVote.setOnClickListener(downClick);
+        if(message.getUser_picture()!=null){
+            Picasso.with(context).load(message.getUser_picture()).into(holder.forumPicture);
+        }
         return rowView;
     }
 
@@ -109,7 +114,7 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         @Bind(R.id.forum_report) TextView report;
         @Bind(R.id.forum_up) ImageView upVote;
         @Bind(R.id.forum_down) ImageView downVote;
-
+        @Bind(R.id.forum_icon) ImageView forumPicture;
 
         public ViewHolder(View view){
             ButterKnife.bind(this, view);

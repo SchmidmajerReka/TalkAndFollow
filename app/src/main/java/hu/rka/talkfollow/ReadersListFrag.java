@@ -32,13 +32,13 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
 
         readerAdapter = new ReaderAdapter(getActivity(), 0);
         ArrayList<Readers> items = new ArrayList<>();
-        for (int i = 0; i < 25; i++) {
+        /*for (int i = 0; i < 25; i++) {
             Readers item = new Readers();
             item.setName("FirstName LastName " + i);
             item.setRate(3);
             item.setDate("2016.01.09");
             items.add(item);
-        }
+        }*/
 
         readerAdapter.setReaders(items);
         listView.setAdapter(readerAdapter);

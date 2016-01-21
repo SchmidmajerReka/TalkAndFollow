@@ -4,40 +4,49 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.10..
  */
 public class ForumMessage {
-    String author; //name
-    String messageText;
-    String url;
-    int voteCount;
+    int id;
+    String user_name; //name
+    String message;
+    String user_picture;
+    int approval_count;
 
-    public String getAuthor() {
-        return author;
+    public int getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getMessageText() {
-        return messageText;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getMessage() {
+        return message;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public int getVoteCount() {
-        return voteCount;
+    public String getUser_picture() {
+        return user_picture;
     }
 
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
+    public void setUser_picture(String user_picture) {
+        this.user_picture = user_picture;
+    }
+
+    public int getApproval_count() {
+        return approval_count;
+    }
+
+    public void setApproval_count(int approval_count) {
+        this.approval_count = approval_count;
     }
 }

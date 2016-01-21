@@ -29,7 +29,7 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
 
     public static RestAdapter.Builder getRestAdapterBuilder() {
         return new RestAdapter.Builder()
-                .setEndpoint("https://www.googleapis.com")
+                .setEndpoint("http://emih.konstruktor.hu/")
                 .setClient(new TimeoutUrlConnection());
     }
 
@@ -44,7 +44,7 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
 
     @Override
     protected String getServerUrl() {
-        return "https://www.googleapis.com";
+        return "http://emih.konstruktor.hu/";
     }
 
     @Override

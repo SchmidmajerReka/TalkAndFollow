@@ -4,11 +4,20 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.09..
  */
 public class Readers {
+    int id;
     String name;
-    String date;
-    String url;
-    float rate;
+    float book_added;
+    String user_picture;
+    float rating;
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -18,27 +27,27 @@ public class Readers {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
+    public float getBook_added() {
+        return book_added;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setBook_added(float book_added) {
+        this.book_added = book_added;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUser_picture() {
+        return user_picture;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUser_picture(String user_picture) {
+        this.user_picture = user_picture;
     }
 
-    public float getRate() {
-        return rate;
+    public float getRating() {
+        return rating;
     }
 
-    public void setRate(float rate) {
-        this.rate = rate;
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

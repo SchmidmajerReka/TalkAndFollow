@@ -10,6 +10,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -24,10 +26,12 @@ import hu.rka.talkfollow.models.Readers;
 public class ReaderAdapter extends ArrayAdapter<Readers> {
     ArrayList<Readers> readers = new ArrayList<>();
     LayoutInflater inflater;
+    Context context;
 
     public ReaderAdapter(Context context, int resource){
         super(context,resource);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
     }
 
     @Override
@@ -45,10 +49,13 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
         }
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        Readers item = readers.get(position);
-        holder.name.setText(item.getName());
-        holder.readerTime.setText(item.getDate());
-        holder.criticRating.setRating(item.getRate());
+        Readers reader = readers.get(position);
+        holder.name.setText(reader.getName());
+        holder.readerTime.setText(String.valueOf(reader.getBook_added()));
+        holder.criticRating.setRating(reader.getRating());
+        if(reader.getUser_picture()!=null){
+            Picasso.with(context).load(reader.getUser_picture()).into(holder.criticProfile);
+        }
         return rowView;
     }
 

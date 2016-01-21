@@ -20,6 +20,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -28,6 +31,10 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.GetDetailsRequest;
+import hu.rka.talkfollow.results.DetailsResult;
 
 /**
  * Created by Réka on 2016.01.09..
@@ -53,6 +60,9 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     boolean bookAdded;
     Bundle bundle;
     TabMenuActivity activity;
+    Book bookDetail;
+
+    //int molyid;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,18 +72,15 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
         bookAdded = activity.isBookadded();
-        tags.setText("Tags: " + bundle.getString("tags"));
-        String url = bundle.getString("url");
-        if(url!=null) {
-            Picasso.with(context).load(url).into(detailCover);
-        }else{
-            detailCover.setImageResource(R.drawable.bookcover);
-        }
+
+
+        tags.setText("Tags: " + bookDetail.getTags());
+        Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
         if(bookAdded) {
             pagenumDetails.setVisibility(View.VISIBLE);
-            bookmark.setText(String.valueOf(bundle.getInt("bookmark")));
+            bookmark.setText(String.valueOf(bookDetail.getBookmark()));
             myRating.setVisibility(View.VISIBLE);
-            myRating.setRating(bundle.getFloat("myrating"));
+            myRating.setRating(bookDetail.getMy_rating());
             editBookmark.setOnClickListener(editBookmarkClick);
             bookFinished.setVisibility(View.VISIBLE);
             bookFinished.setOnClickListener(bookFinishedClick);
@@ -85,8 +92,11 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             add.setVisibility(View.VISIBLE);
             add.setOnClickListener(addClick);
         }
-        othersRating.setRating(bundle.getFloat("otherrating"));
-        description.setText(bundle.getString("description"));
+        othersRating.setRating(bookDetail.getAverage_rating());
+        String desc = bookDetail.getDescription();
+        description.setText(bookDetail.getDescription());
+        Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
+
         return v;
     }
 
@@ -99,12 +109,15 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             pagenumDetails.setVisibility(View.VISIBLE);
             bookmark.setText("0");
             myRating.setVisibility(View.VISIBLE);
-            myRating.setRating(bundle.getFloat("myrating"));
+            myRating.setRating(0);
             editBookmark.setOnClickListener(editBookmarkClick);
             bookFinished.setVisibility(View.VISIBLE);
             visibilityText.setVisibility(View.VISIBLE);
             visibility.setVisibility(View.VISIBLE);
             Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
+            bookDetail = activity.getBookDetails();
+
+
         }
     };
 
@@ -113,6 +126,11 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
+
+
+
+
 
     @Override
     public void onCreateOptionsMenu(

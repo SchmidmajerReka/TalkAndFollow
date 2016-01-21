@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -22,11 +24,14 @@ import hu.rka.talkfollow.models.Critic;
 public class CriticAdapter extends ArrayAdapter<Critic> {
     ArrayList<Critic> critics = new ArrayList<>();
     LayoutInflater inflater;
+    Context context;
 
     public  CriticAdapter(Context context, int resource){
         super(context,resource);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
     }
+
 
     @Override
     public int getCount() {
@@ -43,12 +48,19 @@ public class CriticAdapter extends ArrayAdapter<Critic> {
         }
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        Critic item = critics.get(position);
-        holder.criticAuthor.setText(item.getAuthor());
-        holder.criticTitle.setText(item.getTitle());
-        holder.criticText.setText(item.getCriticText());
-        holder.criticRating.setRating(item.getRate());
-        holder.criticTime.setText(item.getUpdatedTime());
+        Critic critic = critics.get(position);
+        holder.criticAuthor.setText(critic.getUser_name());
+        holder.criticTitle.setText(critic.getTitle());
+        holder.criticText.setText(critic.getCritic());
+        holder.criticRating.setRating(critic.getRating());
+        if(critic.getTime()!=null){
+            holder.criticTime.setText(critic.getTime());
+        }else{
+            holder.criticTime.setText("");
+        }
+        if(critic.getUser_picture()!=null){
+            Picasso.with(context).load(critic.getUser_picture()).into(holder.criticProfile);
+        }
 
 
         return rowView;
