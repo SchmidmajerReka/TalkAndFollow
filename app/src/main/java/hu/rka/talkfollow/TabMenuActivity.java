@@ -1,7 +1,11 @@
 package hu.rka.talkfollow;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +21,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
 
 import hu.rka.talkfollow.adapters.TabPagerAdapter;
 import hu.rka.talkfollow.models.Book;
@@ -48,6 +53,8 @@ public class TabMenuActivity extends AppCompatActivity {
     TabPagerAdapter pagerAdapter;
     Menu menu;
     int starter;
+    private Handler handler;
+    private ProgressDialog progress;
 
     TabLayout tabLayout;
 
@@ -61,13 +68,88 @@ public class TabMenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(bundle.getString("title"));
         getSupportActionBar().setSubtitle(bundle.getString("author"));
+
+
         bookadded = bundle.getBoolean("added");
         starter = bundle.getInt("starter");
         context = this;
-        GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
-        spiceManager.execute(getDataRequest, new DataRequestListener());
+
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Please Wait!!");
+        progress.setMessage("Wait!!");
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        handler = new Handler() {
+
+            @Override
+            public void handleMessage(Message msg) {
+                progress.dismiss();
+                viewPager = (ViewPager) findViewById(R.id.pager);
+                if (bookadded) {
+                    tabNumber = 4;
+                } else {
+                    tabNumber = 3;
+                }
+
+                //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+
+                int size = tabNumber;
+                for (int i = 0; i < size; i++) {
+                    tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
+                }
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+                TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+                viewPager.setAdapter(pagerAdapter);
+
+                if (starter == 3) {
+                    viewPager.setCurrentItem(3);
+                }
+
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                    }
+                });
+
+                super.handleMessage(msg);
+            };
+        };
+
+        progress.show();
+        new Thread()
+        {
+            public void run()
+            {
+                GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
+                spiceManager.execute(getDataRequest, new DataRequestListener());
+
+            }
+
+        }.start();
 
     }
+
+
+
+
 
     public final class DataRequestListener implements
             RequestListener<DetailsResult> {
@@ -84,46 +166,9 @@ public class TabMenuActivity extends AppCompatActivity {
             readers = result.getReaders();
             messages = result.getForum_messages();
 
-            viewPager = (ViewPager) findViewById(R.id.pager);
-            if(bookadded){
-                tabNumber = 4;
-            }else{
-                tabNumber = 3;
-            }
-
-            //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+            handler.sendEmptyMessage(0);
 
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-            int size = tabNumber;
-            for (int i = 0; i < size; i++) {
-                tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-            }
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-            TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-            viewPager.setAdapter(pagerAdapter);
-
-            if(starter==3){
-                viewPager.setCurrentItem(3);
-            }
-
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    viewPager.setCurrentItem(tab.getPosition());
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-                }
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-                }
-            });
         }
     }
 

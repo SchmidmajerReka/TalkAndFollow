@@ -72,7 +72,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
         bookAdded = activity.isBookadded();
-
+        bookDetail = activity.getBookDetails();
 
         tags.setText("Tags: " + bookDetail.getTags());
         Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
@@ -115,7 +115,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             visibilityText.setVisibility(View.VISIBLE);
             visibility.setVisibility(View.VISIBLE);
             Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
-            bookDetail = activity.getBookDetails();
+
 
 
         }

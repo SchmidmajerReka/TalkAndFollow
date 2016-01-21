@@ -29,6 +29,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     boolean bookAdded;
     Context context;
     Bundle bundle;
+    TabMenuActivity activity;
+    ArrayList<Critic> critics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +42,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
         bundle = activity.getBundle();
         criticAdapter = new CriticAdapter(getActivity(), 0);
         bookAdded=activity.isBookadded();
-        ArrayList<Critic> items = new ArrayList<>();
+        critics = activity.getCritics();
+
         /*
         Critic item = new Critic();
         item.setTitle("Saját Kritikám");
@@ -64,7 +67,7 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
             items.add(item);
         }
         */
-        criticAdapter.setCritic(items);
+        criticAdapter.setCritic(critics);
         listView.setAdapter(criticAdapter);
         listView.setOnItemClickListener(listItemClick);
         return v;

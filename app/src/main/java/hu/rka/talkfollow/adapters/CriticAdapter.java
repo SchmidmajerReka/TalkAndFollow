@@ -58,10 +58,7 @@ public class CriticAdapter extends ArrayAdapter<Critic> {
         }else{
             holder.criticTime.setText("");
         }
-        if(critic.getUser_picture()!=null){
-            Picasso.with(context).load(critic.getUser_picture()).into(holder.criticProfile);
-        }
-
+        Picasso.with(context).load(critic.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.criticProfile);
 
         return rowView;
     }

@@ -22,6 +22,8 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
     ListView listView;
     ReaderAdapter readerAdapter;
     Context context;
+    TabMenuActivity activity;
+    ArrayList<Readers> readers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,9 +31,9 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
         listView = (ListView) v.findViewById(R.id.reader_list);
 
         context = getActivity();
-
+        readers = activity.getReaders();
         readerAdapter = new ReaderAdapter(getActivity(), 0);
-        ArrayList<Readers> items = new ArrayList<>();
+
         /*for (int i = 0; i < 25; i++) {
             Readers item = new Readers();
             item.setName("FirstName LastName " + i);
@@ -40,7 +42,7 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
             items.add(item);
         }*/
 
-        readerAdapter.setReaders(items);
+        readerAdapter.setReaders(readers);
         listView.setAdapter(readerAdapter);
 
         return v;

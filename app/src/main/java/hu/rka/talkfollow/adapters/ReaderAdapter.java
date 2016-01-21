@@ -53,9 +53,8 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
         holder.name.setText(reader.getName());
         holder.readerTime.setText(String.valueOf(reader.getBook_added()));
         holder.criticRating.setRating(reader.getRating());
-        if(reader.getUser_picture()!=null){
-            Picasso.with(context).load(reader.getUser_picture()).into(holder.criticProfile);
-        }
+        Picasso.with(context).load(reader.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.readerProfile);
+
         return rowView;
     }
 
@@ -68,7 +67,7 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
         @Bind(R.id.reader_name)
         TextView name;
         @Bind(R.id.reader_profile_pic)
-        ImageView criticProfile;
+        ImageView readerProfile;
         @Bind(R.id.reader_time) TextView readerTime;
         @Bind(R.id.reader_ratingBar)
         RatingBar criticRating;
