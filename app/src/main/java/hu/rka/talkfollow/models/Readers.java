@@ -6,7 +6,7 @@ package hu.rka.talkfollow.models;
 public class Readers {
     int id;
     String name;
-    float book_added;
+    long book_added;
     String user_picture;
     float rating;
 
@@ -27,11 +27,11 @@ public class Readers {
         this.name = name;
     }
 
-    public float getBook_added() {
+    public long getBook_added() {
         return book_added;
     }
 
-    public void setBook_added(float book_added) {
+    public void setBook_added(long book_added) {
         this.book_added = book_added;
     }
 

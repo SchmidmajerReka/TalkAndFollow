@@ -29,7 +29,7 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_reader, container, false);
         listView = (ListView) v.findViewById(R.id.reader_list);
-
+        activity = (TabMenuActivity) getActivity();
         context = getActivity();
         readers = activity.getReaders();
         readerAdapter = new ReaderAdapter(getActivity(), 0);

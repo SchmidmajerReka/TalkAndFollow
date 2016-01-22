@@ -76,18 +76,17 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            /*Critic item = criticAdapter.getCritic(position);
+            Critic item = criticAdapter.getCritic(position);
             Intent detailIntent = new Intent(context, CriticDetailsActivity.class);
             detailIntent.putExtra("title", item.getTitle());
-            detailIntent.putExtra("author", item.getAuthor());
-            detailIntent.putExtra("critictext", item.getCriticText());
-            detailIntent.putExtra("rate", item.getRate());
-            detailIntent.putExtra("createdtime", item.getCreatedTime());
-            detailIntent.putExtra("updatedtime", item.getUpdatedTime());
+            detailIntent.putExtra("author", item.getUser_name());
+            detailIntent.putExtra("critictext", item.getCritic());
+            detailIntent.putExtra("rate", item.getRating());
+            detailIntent.putExtra("createdtime", item.getCreated_at());
+            detailIntent.putExtra("updatedtime", item.getUpdated_at());
             detailIntent.putExtra("booktitle", bundle.getString("title"));
             detailIntent.putExtra("mine", item.isMine());
-
-            context.startActivity(detailIntent);*/
+            context.startActivity(detailIntent);
             Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
         }
     };

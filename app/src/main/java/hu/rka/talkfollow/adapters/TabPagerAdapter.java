@@ -1,9 +1,9 @@
 package hu.rka.talkfollow.adapters;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 
 import hu.rka.talkfollow.BookDetailsFrag;
 import hu.rka.talkfollow.CriticListFrag;
@@ -43,6 +43,11 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return mNumOfTabs;
+    }
+
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
     }
 
     @Override

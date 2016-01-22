@@ -68,12 +68,55 @@ public class TabMenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(bundle.getString("title"));
         getSupportActionBar().setSubtitle(bundle.getString("author"));
-
+        //bookDetail = new Book();
+        critics = new ArrayList<>();
+        readers = new ArrayList<>();
+        messages = new ArrayList<>();
 
         bookadded = bundle.getBoolean("added");
         starter = bundle.getInt("starter");
         context = this;
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        if (bookadded) {
+            tabNumber = 4;
+        } else {
+            tabNumber = 3;
+        }
 
+        //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+
+        int size = tabNumber;
+        for (int i = 0; i < size; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
+        }
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+        final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+        viewPager.setAdapter(pagerAdapter);
+
+        if (starter == 3) {
+            viewPager.setCurrentItem(3);
+        }
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
         progress = new ProgressDialog(this);
         progress.setTitle("Please Wait!!");
@@ -86,51 +129,10 @@ public class TabMenuActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 progress.dismiss();
-                viewPager = (ViewPager) findViewById(R.id.pager);
-                if (bookadded) {
-                    tabNumber = 4;
-                } else {
-                    tabNumber = 3;
-                }
-
-                //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
-
-
-                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-
-                int size = tabNumber;
-                for (int i = 0; i < size; i++) {
-                    tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-                }
-                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-                TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-                viewPager.setAdapter(pagerAdapter);
-
-                if (starter == 3) {
-                    viewPager.setCurrentItem(3);
-                }
-
-                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        viewPager.setCurrentItem(tab.getPosition());
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                    }
-                });
+                pagerAdapter.notifyDataSetChanged();
 
                 super.handleMessage(msg);
-            };
+            }
         };
 
         progress.show();
@@ -140,22 +142,19 @@ public class TabMenuActivity extends AppCompatActivity {
             {
                 GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
                 spiceManager.execute(getDataRequest, new DataRequestListener());
-
             }
 
         }.start();
 
     }
 
-
-
-
-
     public final class DataRequestListener implements
             RequestListener<DetailsResult> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            handler.sendEmptyMessage(0);
+            finish();
             Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }
 

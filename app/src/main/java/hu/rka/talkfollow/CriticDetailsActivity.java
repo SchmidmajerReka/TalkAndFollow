@@ -15,6 +15,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -50,11 +53,14 @@ public class CriticDetailsActivity extends AppCompatActivity {
         if ( bundle != null) {
             getSupportActionBar().setTitle(bundle.getString("author"));
             detailTitle.setText(bundle.getString("title"));
-            detailCreatedTime.setText(bundle.getString("createdtime"));
-            detailUpdatedTime.setText(bundle.getString("updatedtime"));
+            long created = bundle.getLong("createdtime");
+            String dateCreated = new SimpleDateFormat("dd/MM/yyyy").format(new Date(created));
+            detailCreatedTime.setText(dateCreated);
+            long updated = bundle.getLong("updatedtime");
+            String dateUpdated = new SimpleDateFormat("dd/MM/yyyy").format(new Date(updated));
+            detailUpdatedTime.setText(dateUpdated);
             detailRate.setRating(bundle.getFloat("rate"));
             detailText.setText(bundle.getString("critictext"));
-
         }
 
     }

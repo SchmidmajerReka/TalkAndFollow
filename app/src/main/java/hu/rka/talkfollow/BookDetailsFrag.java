@@ -62,8 +62,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     TabMenuActivity activity;
     Book bookDetail;
 
-    //int molyid;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_book_details, container, false);
@@ -73,30 +71,31 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         bundle = activity.getBundle();
         bookAdded = activity.isBookadded();
         bookDetail = activity.getBookDetails();
+        if(bookDetail != null){
+            tags.setText("Tags: " + bookDetail.getTags());
+            Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
+            if(bookAdded) {
+                pagenumDetails.setVisibility(View.VISIBLE);
+                bookmark.setText(String.valueOf(bookDetail.getBookmark()));
+                myRating.setVisibility(View.VISIBLE);
+                myRating.setRating(bookDetail.getMy_rating());
+                editBookmark.setOnClickListener(editBookmarkClick);
+                bookFinished.setVisibility(View.VISIBLE);
+                bookFinished.setOnClickListener(bookFinishedClick);
+                visibilityText.setVisibility(View.VISIBLE);
+                visibility.setVisibility(View.VISIBLE);
+                visibility.setOnClickListener(checkBoxClick);
+            }else{
+                myRating.setVisibility(View.INVISIBLE);
+                add.setVisibility(View.VISIBLE);
+                add.setOnClickListener(addClick);
+            }
+            float rating = bookDetail.getAverage_rating();
+            othersRating.setRating(rating);
+            Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
 
-        tags.setText("Tags: " + bookDetail.getTags());
-        Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
-        if(bookAdded) {
-            pagenumDetails.setVisibility(View.VISIBLE);
-            bookmark.setText(String.valueOf(bookDetail.getBookmark()));
-            myRating.setVisibility(View.VISIBLE);
-            myRating.setRating(bookDetail.getMy_rating());
-            editBookmark.setOnClickListener(editBookmarkClick);
-            bookFinished.setVisibility(View.VISIBLE);
-            bookFinished.setOnClickListener(bookFinishedClick);
-            visibilityText.setVisibility(View.VISIBLE);
-            visibility.setVisibility(View.VISIBLE);
-            visibility.setOnClickListener(checkBoxClick);
-        }else{
-            myRating.setVisibility(View.INVISIBLE);
-            add.setVisibility(View.VISIBLE);
-            add.setOnClickListener(addClick);
+            description.setText(bookDetail.getDescription());
         }
-        othersRating.setRating(bookDetail.getAverage_rating());
-        String desc = bookDetail.getDescription();
-        description.setText(bookDetail.getDescription());
-        Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
-
         return v;
     }
 
@@ -109,7 +108,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             pagenumDetails.setVisibility(View.VISIBLE);
             bookmark.setText("0");
             myRating.setVisibility(View.VISIBLE);
-            myRating.setRating(0);
             editBookmark.setOnClickListener(editBookmarkClick);
             bookFinished.setVisibility(View.VISIBLE);
             visibilityText.setVisibility(View.VISIBLE);

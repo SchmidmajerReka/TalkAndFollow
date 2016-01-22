@@ -30,7 +30,9 @@ import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
 import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.GetBestSellersRequest;
 import hu.rka.talkfollow.requests.GetMyLibraryRequest;
+import hu.rka.talkfollow.results.BestSellerResult;
 import hu.rka.talkfollow.results.MyLibraryResult;
 
 /**
@@ -87,7 +89,7 @@ public class AddBookActivity extends AppCompatActivity {
         }
         */
         boolean showChat = false;
-        GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest();
+        GetBestSellersRequest getDataRequest = new GetBestSellersRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
         bookAdapter.setBook(items, showChat);
         offerBookList.setAdapter(bookAdapter);
@@ -97,7 +99,20 @@ public class AddBookActivity extends AppCompatActivity {
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Book item = bookAdapter.getBook(position);
+            Intent detailIntent = new Intent(context, TabMenuActivity.class);
+            detailIntent.putExtra("molyid", item.getMolyid());
+            detailIntent.putExtra("added" ,false);
+            detailIntent.putExtra("title", item.getTitle());
+            detailIntent.putExtra("author", item.getAuthors());
+            /*detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
+            detailIntent.putExtra("bookmark", item.getPageRead());
+            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
+            detailIntent.putExtra("myrating", item.getMyRating());
+            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
+            */context.startActivity(detailIntent);
             Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
+
         }
         /*    Book item = bookAdapter.getBook(position);
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
@@ -145,7 +160,7 @@ public class AddBookActivity extends AppCompatActivity {
 
 
     public final class DataRequestListener implements
-            RequestListener<MyLibraryResult> {
+            RequestListener<BestSellerResult> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -153,7 +168,7 @@ public class AddBookActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onRequestSuccess(MyLibraryResult result) {
+        public void onRequestSuccess(BestSellerResult result) {
             ArrayList<Book> itemstmp = result.getItems();
             if (itemstmp != null){
                 Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();

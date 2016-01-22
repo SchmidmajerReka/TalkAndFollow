@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,7 +53,9 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
 
         Readers reader = readers.get(position);
         holder.name.setText(reader.getName());
-        holder.readerTime.setText(String.valueOf(reader.getBook_added()));
+        long bookAdded = reader.getBook_added();
+        String dateBookAdded = new SimpleDateFormat("dd/MM/yyyy").format(new Date(bookAdded));
+        holder.readerTime.setText(dateBookAdded);
         holder.criticRating.setRating(reader.getRating());
         Picasso.with(context).load(reader.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.readerProfile);
 

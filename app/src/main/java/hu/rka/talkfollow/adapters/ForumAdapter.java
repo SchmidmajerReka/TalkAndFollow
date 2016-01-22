@@ -60,9 +60,7 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         holder.report.setOnClickListener(reportClick);
         holder.upVote.setOnClickListener(upClick);
         holder.downVote.setOnClickListener(downClick);
-        if(message.getUser_picture()!=null){
-            Picasso.with(context).load(message.getUser_picture()).into(holder.forumPicture);
-        }
+        Picasso.with(context).load(message.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.forumPicture);
         return rowView;
     }
 
@@ -114,7 +112,7 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         @Bind(R.id.forum_report) TextView report;
         @Bind(R.id.forum_up) ImageView upVote;
         @Bind(R.id.forum_down) ImageView downVote;
-        @Bind(R.id.forum_icon) ImageView forumPicture;
+        @Bind(R.id.forum_profile_pic) ImageView forumPicture;
 
         public ViewHolder(View view){
             ButterKnife.bind(this, view);

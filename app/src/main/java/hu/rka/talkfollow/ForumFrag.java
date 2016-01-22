@@ -28,16 +28,18 @@ public class ForumFrag extends android.support.v4.app.Fragment {
         ListView listView;
         ForumAdapter forumAdapter;
         Context context;
+        TabMenuActivity activity;
+         ArrayList<ForumMessage> messages;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.fragment_forum, container, false);
-            ButterKnife.bind(this, v);
             listView = (ListView) v.findViewById(R.id.forum_list);
+            activity = (TabMenuActivity) getActivity();
             context = getActivity();
-            TabMenuActivity activity = (TabMenuActivity) getActivity();
+            messages = activity.getMessages();
             forumAdapter = new ForumAdapter(getActivity(), 0);
-            ArrayList<ForumMessage> items = new ArrayList<>();
+
             /*for (int i = 0; i < 15; i++) {
             ForumMessage item = new ForumMessage();
             item.setAuthor("Author " + i);
@@ -46,10 +48,10 @@ public class ForumFrag extends android.support.v4.app.Fragment {
             items.add(item);
             }
             */
-            forumAdapter.setForumMessages(items);
+            forumAdapter.setForumMessages(messages);
             listView.setAdapter(forumAdapter);
             return v;
-            }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,7 @@ public class ForumFrag extends android.support.v4.app.Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             inflater.inflate(R.menu.menu_forum, menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

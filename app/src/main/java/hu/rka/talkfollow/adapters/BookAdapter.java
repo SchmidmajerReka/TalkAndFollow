@@ -78,10 +78,15 @@ public class BookAdapter extends ArrayAdapter<Book> {
         public void onClick(View v) {
             int position=(Integer)v.getTag();
             Book book = books.get(position);
+
+
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
+            detailIntent.putExtra("molyid", book.getMolyid());
             detailIntent.putExtra("added" ,true);
+            detailIntent.putExtra("title", book.getTitle());
+            detailIntent.putExtra("author", book.getAuthors());
             detailIntent.putExtra("starter", 3);
-            detailIntent.putExtra("url", book.getPicture());
+            /*detailIntent.putExtra("url", book.getPicture());
             detailIntent.putExtra("title", book.getTitle());
             detailIntent.putExtra("author", book.getAuthors());
             detailIntent.putExtra("tags", book.getTags());
@@ -89,6 +94,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             detailIntent.putExtra("otherrating", book.getAverage_rating());
             detailIntent.putExtra("myrating", book.getMy_rating());
             detailIntent.putExtra("description", book.getDescription());
+            */
             context.startActivity(detailIntent);
         }
     };
