@@ -68,7 +68,7 @@ public class TabMenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(bundle.getString("title"));
         getSupportActionBar().setSubtitle(bundle.getString("author"));
-        //bookDetail = new Book();
+        bookDetail = new Book();
         critics = new ArrayList<>();
         readers = new ArrayList<>();
         messages = new ArrayList<>();
