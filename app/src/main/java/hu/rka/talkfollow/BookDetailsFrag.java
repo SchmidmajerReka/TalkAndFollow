@@ -92,10 +92,8 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         }
 
 
-        othersRating.setRating( bookDetail.getAverage_rating());
-        othersRating.setRating((float)2);
-
-        //Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
+        othersRating.setRating(bookDetail.getAverage_rating());
+        Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
 
         description.setText(bookDetail.getDescription());
 

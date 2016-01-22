@@ -76,47 +76,7 @@ public class TabMenuActivity extends AppCompatActivity {
         bookadded = bundle.getBoolean("added");
         starter = bundle.getInt("starter");
         context = this;
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        if (bookadded) {
-            tabNumber = 4;
-        } else {
-            tabNumber = 3;
-        }
 
-        //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
-
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-
-        int size = tabNumber;
-        for (int i = 0; i < size; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-        }
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-        final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-        viewPager.setAdapter(pagerAdapter);
-
-        if (starter == 3) {
-            viewPager.setCurrentItem(3);
-        }
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
 
         progress = new ProgressDialog(this);
         progress.setTitle("Please Wait!!");
@@ -129,7 +89,47 @@ public class TabMenuActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 progress.dismiss();
-                pagerAdapter.notifyDataSetChanged();
+                viewPager = (ViewPager) findViewById(R.id.pager);
+                if (bookadded) {
+                    tabNumber = 4;
+                } else {
+                    tabNumber = 3;
+                }
+
+                //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+
+                int size = tabNumber;
+                for (int i = 0; i < size; i++) {
+                    tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
+                }
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+                final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+                viewPager.setAdapter(pagerAdapter);
+
+                if (starter == 3) {
+                    viewPager.setCurrentItem(3);
+                }
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+                    }
+                });
 
                 super.handleMessage(msg);
             }
