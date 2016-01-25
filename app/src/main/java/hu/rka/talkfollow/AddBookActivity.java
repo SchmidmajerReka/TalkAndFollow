@@ -31,9 +31,9 @@ import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.GetBestSellersRequest;
-import hu.rka.talkfollow.requests.GetMyLibraryRequest;
+import hu.rka.talkfollow.requests.GetSearchResultRequest;
 import hu.rka.talkfollow.results.BestSellerResult;
-import hu.rka.talkfollow.results.MyLibraryResult;
+import hu.rka.talkfollow.results.SearchResult;
 
 /**
  * Created by Réka on 2016.01.09..
@@ -60,34 +60,6 @@ public class AddBookActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Add to Library");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bookAdapter = new BookAdapter(context, 0);
-        /*
-        for (int i = 90; i < 98; i++) {
-            IndustryIdentifiers industryIdentifiers = new IndustryIdentifiers();
-            industryIdentifiers.setType("ISBN_13");
-            industryIdentifiers.setIdentifier("123456789");
-            ArrayList<IndustryIdentifiers> industryIdentifiersArray = new ArrayList<>();
-            industryIdentifiersArray.add(industryIdentifiers);
-            VolumeInfo volumeInfo = new VolumeInfo();
-            volumeInfo.setTitle("Title: " + (100 - i));
-            ArrayList<String> authors = new ArrayList<>();
-            authors.add("Author: " + (100 - i));
-            volumeInfo.setAuthors(authors);
-            volumeInfo.setDescription("If you can't explain it simply you don't understand it well enough");
-            volumeInfo.setIndustryIdentifierses(industryIdentifiersArray);
-            volumeInfo.setPageCount(165);
-            ArrayList<String> categories = new ArrayList<>();
-            categories.add("Romantic");
-            categories.add("Sci-fi");
-            volumeInfo.setCategories(categories);
-            volumeInfo.setAverageRating(4);
-            Book item = new Book();
-            item.setVolumeInfo(volumeInfo);
-            int randomnumber = rand.nextInt(item.getVolumeInfo().getPageCount())%+1;
-            item.setPageRead(randomnumber);
-            item.setMyRating(5);
-            items.add(item);
-        }
-        */
         boolean showChat = false;
         GetBestSellersRequest getDataRequest = new GetBestSellersRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
@@ -105,12 +77,7 @@ public class AddBookActivity extends AppCompatActivity {
             detailIntent.putExtra("added" ,false);
             detailIntent.putExtra("title", item.getTitle());
             detailIntent.putExtra("author", item.getAuthors());
-            /*detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
-            detailIntent.putExtra("bookmark", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
-            detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
-            */context.startActivity(detailIntent);
+            context.startActivity(detailIntent);
             Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
 
         }
@@ -142,14 +109,14 @@ public class AddBookActivity extends AppCompatActivity {
             // Ha a keresés gombra kattintott a billentyuzeten akkor fut le.
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(context, "Search phrase: " + query, Toast.LENGTH_LONG).show();
+                GetSearchResultRequest getSearchRequest = new GetSearchResultRequest(String.valueOf(query));
+                spiceManager.execute(getSearchRequest, new SearchRequestListener());
                 return false;
             }
 
             // Ha megváltozott a keresőben a szöveg akkor fut le.
             @Override
             public boolean onQueryTextChange(String query) {
-                Toast.makeText(context, "Text changed: " + query, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
@@ -157,6 +124,31 @@ public class AddBookActivity extends AppCompatActivity {
         return true;
     };
 
+
+
+
+
+    public final class SearchRequestListener implements RequestListener<SearchResult>{
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba", Toast.LENGTH_LONG).show();
+            helpText.setText("No book found");
+            ArrayList<Book> empty = new ArrayList<>();
+            bookAdapter.setBook(empty, false);
+        }
+
+        @Override
+        public void onRequestSuccess(SearchResult searchResult) {
+            helpText.setText("");
+            ArrayList<Book> itemstmp = searchResult.getItems();
+            if (itemstmp != null) {
+                bookAdapter.setBook(itemstmp, false);
+            }else{
+            Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
+
+        }
+        }
+    }
 
 
     public final class DataRequestListener implements
@@ -170,19 +162,17 @@ public class AddBookActivity extends AppCompatActivity {
         @Override
         public void onRequestSuccess(BestSellerResult result) {
             ArrayList<Book> itemstmp = result.getItems();
-            if (itemstmp != null){
+            if (itemstmp != null) {
                 Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
                 boolean showChat = false;
-                for(int i=0; i<itemstmp.size(); i++){
+                for (int i = 0; i < itemstmp.size(); i++) {
                     items.add(itemstmp.get(i));
                 }
                 bookAdapter.setBook(items, showChat);
-            }else{
-                Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
-                helpText.setText("Since ISBN numbers are country specific, there is a chance that the book you are looking for is not available on that language according to google.books. you can try to find the book by author or title");
             }
         }
     }
+
 
 
     @Override
@@ -194,9 +184,9 @@ public class AddBookActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("MainActivity", "Scanned");
-                //GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest(result.getContents());
-                //spiceManager.execute(getDataRequest, new DataRequestListener());
-                helpText.setText("");
+                GetSearchResultRequest getSearchRequest = new GetSearchResultRequest(result.getContents());
+                spiceManager.execute(getSearchRequest, new SearchRequestListener());
+                helpText.setText("Since ISBN numbers are country specific, there is a chance that the book you are looking for is not available on that language. you can try to find the book by author or title");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
@@ -210,8 +200,6 @@ public class AddBookActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case R.id.action_search:
-                //Intent detailIntent = new Intent(context, LoginActivity.class);
-                //context.startActivity(detailIntent);
                 Toast.makeText(context, "Search book", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.barcode:

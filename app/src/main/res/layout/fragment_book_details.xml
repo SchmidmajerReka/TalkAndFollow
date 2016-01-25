@@ -83,9 +83,9 @@
                 android:id="@+id/others_ratingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
+                android:layout_marginTop="5dp"
                 android:isIndicator="true"
-                android:stepSize="0.5"/>
+                />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -103,8 +103,7 @@
                     android:id="@+id/my_ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:stepSize="0.5"/>
+                    android:visibility="invisible" />
 
             </FrameLayout>
 

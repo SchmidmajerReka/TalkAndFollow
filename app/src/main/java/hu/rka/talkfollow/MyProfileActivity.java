@@ -24,9 +24,12 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hu.rka.talkfollow.models.UploadProfile;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.GetMyLibraryRequest;
 import hu.rka.talkfollow.requests.GetMyProfileRequest;
+import hu.rka.talkfollow.requests.PostProfileRequest;
+import hu.rka.talkfollow.results.EditProfileResult;
 import hu.rka.talkfollow.results.MyLibraryResult;
 import hu.rka.talkfollow.results.MyProfileResult;
 
@@ -39,7 +42,7 @@ public class MyProfileActivity extends AppCompatActivity {
     int finished;
     String description;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
-
+    Dialog aboutMeDialog;
 
     @Bind(R.id.profile_pic)
     ImageView profilePic;
@@ -73,6 +76,8 @@ public class MyProfileActivity extends AppCompatActivity {
         */
         GetMyProfileRequest getDataRequest = new GetMyProfileRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
+
+
     }
 
 
@@ -93,6 +98,28 @@ public class MyProfileActivity extends AppCompatActivity {
             bookNumView.setText("Number of books: " + result.getBooks_number());
             bookFinished.setText("Finished: " + result.getFinished());
             aboutMe.setText(result.getAbout_me());
+        }
+    }
+
+    public final class ProfileRequestListener implements
+            RequestListener<EditProfileResult> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(EditProfileResult result) {
+
+            final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
+            aboutMe.setText(editText.getText());
+            if(result.getMsg() == ""){
+                Toast.makeText(context, "Uploaded", Toast.LENGTH_LONG).show();
+                aboutMe.setText(editText.getText());
+            }else{
+                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -126,27 +153,30 @@ public class MyProfileActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.edit_aboutme:
-
-                final Dialog aboutMeDialog = new Dialog(context);
+                aboutMeDialog = new Dialog(context);
                 aboutMeDialog.setContentView(R.layout.dialog_about_me);
                 aboutMeDialog.setTitle("About Me: ");
                 Button setAboutMe = (Button) aboutMeDialog.findViewById(R.id.edit_about_me_confirm);
                 final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
                 editText.setText(aboutMe.getText());
-
-                setAboutMe.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
-                        aboutMe.setText(editText.getText());
-                        Toast.makeText(context, "AboutMe changed", Toast.LENGTH_LONG).show();
-                        aboutMeDialog.dismiss();
-                    }
-                });
+                setAboutMe.setOnClickListener(editClick);
                 aboutMeDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private View.OnClickListener editClick = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            final EditText editText = (EditText) aboutMeDialog.findViewById(R.id.edit_about_me_text);
+            UploadProfile uploadProfile = new UploadProfile();
+            uploadProfile.setAbout_me(String.valueOf(editText.getText()));
+            PostProfileRequest postProfileRequest = new PostProfileRequest(uploadProfile);
+            spiceManager.execute(postProfileRequest, new ProfileRequestListener());
+            aboutMeDialog.dismiss();
+        }
+    };
 }

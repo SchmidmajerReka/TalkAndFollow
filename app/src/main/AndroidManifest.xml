@@ -69,7 +69,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddBookActivity">
+            android:name=".AddBookActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
