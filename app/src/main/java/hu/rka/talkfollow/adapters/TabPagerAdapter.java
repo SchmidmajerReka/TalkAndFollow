@@ -51,6 +51,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
     public void refreshChilds(DetailsResult result) {
         bookDetailsFrag.refreshUI(result.getBook_details());
+        notifyDataSetChanged();
     }
 
     @Override

@@ -100,18 +100,20 @@ public class TabMenuActivity extends AppCompatActivity {
         //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
 
         int size = tabNumber;
-        for (int i = 0; i < size; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-        }
+
+        // Über cool cucc :D
+        tabLayout.setTabsFromPagerAdapter(pagerAdapter);
+        //  
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
-        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+
         viewPager.setAdapter(pagerAdapter);
 
         if (starter == 3) {
@@ -153,11 +155,12 @@ public class TabMenuActivity extends AppCompatActivity {
             critics = result.getCritics();
             readers = result.getReaders();
             messages = result.getForum_messages();
-            if(bookDetail.isMine()) {
+            if(bookDetail.isMine() == false) {
                 pagerAdapter.setSize(3);
             } else {
                 pagerAdapter.setSize(4);
             }
+            tabLayout.setTabsFromPagerAdapter(pagerAdapter);
             progress.dismiss();
             pagerAdapter.refreshChilds(result);
         }
@@ -174,17 +177,6 @@ public class TabMenuActivity extends AppCompatActivity {
         super.onStart();
         spiceManager.start(context);
 
-    }
-
-    public void setBookadded(boolean bookadded) {
-        this.bookadded = bookadded;
-        tabNumber = 4;
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-        tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[3]));
-
-        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

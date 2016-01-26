@@ -126,7 +126,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             othersRating.setMax(5);
             othersRating.setStepSize(0.5f);
             othersRating.setRating(bookDetail.getAverage_rating());
-            Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
             description.setText(bookDetail.getDescription());
         }
     }
@@ -160,7 +160,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -168,9 +168,9 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
             if(result.getMsg() == ""){
                 bookDetail.setMy_rating(myRating.getRating());
-                Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
             }else{
-                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
                 myRating.setRating(bookDetail.getMy_rating());
             }
         }
