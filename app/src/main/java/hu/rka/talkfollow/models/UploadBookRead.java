@@ -12,16 +12,8 @@ public class UploadBookRead {
         this.read=read;
     }
 
-    public int getBook_id() {
-        return book_id;
-    }
-
     public void setBook_id(int book_id) {
         this.book_id = book_id;
-    }
-
-    public boolean isRead() {
-        return read;
     }
 
     public void setRead(boolean read) {

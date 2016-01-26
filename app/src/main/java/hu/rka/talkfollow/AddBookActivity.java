@@ -39,13 +39,11 @@ import hu.rka.talkfollow.results.SearchResult;
  * Created by Réka on 2016.01.09..
  */
 public class AddBookActivity extends AppCompatActivity {
+
     BookAdapter bookAdapter;
     private Context context;
-    @Bind(R.id.offer_book_list)
-    ListView offerBookList;
-    @Bind(R.id.search_help_text)
-    TextView helpText;
-    Random rand = new Random();
+    @Bind(R.id.offer_book_list) ListView offerBookList;
+    @Bind(R.id.search_help_text) TextView helpText;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     ArrayList<Book> items = new ArrayList<>();
 
@@ -67,6 +65,34 @@ public class AddBookActivity extends AppCompatActivity {
         offerBookList.setAdapter(bookAdapter);
         offerBookList.setOnItemClickListener(listItemClick);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_book, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            // Ha a keresés gombra kattintott a billentyuzeten akkor fut le.
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                GetSearchResultRequest getSearchRequest = new GetSearchResultRequest(String.valueOf(query));
+                spiceManager.execute(getSearchRequest, new SearchRequestListener());
+                return false;
+            }
+
+            // Ha megváltozott a keresőben a szöveg akkor fut le.
+            @Override
+            public boolean onQueryTextChange(String query) {
+                return true;
+            }
+        });
+
+        return true;
+    };
+
 
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
@@ -97,37 +123,6 @@ public class AddBookActivity extends AppCompatActivity {
     };
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_book, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            // Ha a keresés gombra kattintott a billentyuzeten akkor fut le.
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                GetSearchResultRequest getSearchRequest = new GetSearchResultRequest(String.valueOf(query));
-                spiceManager.execute(getSearchRequest, new SearchRequestListener());
-                return false;
-            }
-
-            // Ha megváltozott a keresőben a szöveg akkor fut le.
-            @Override
-            public boolean onQueryTextChange(String query) {
-                return true;
-            }
-        });
-
-        return true;
-    };
-
-
-
-
-
     public final class SearchRequestListener implements RequestListener<SearchResult>{
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -145,8 +140,7 @@ public class AddBookActivity extends AppCompatActivity {
                 bookAdapter.setBook(itemstmp, false);
             }else{
             Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
-
-        }
+          }
         }
     }
 

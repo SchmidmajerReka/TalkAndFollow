@@ -14,9 +14,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentResult;
+
 import java.util.ArrayList;
 
 import hu.rka.talkfollow.adapters.CriticAdapter;
+import hu.rka.talkfollow.models.Book;
 import hu.rka.talkfollow.models.Critic;
 
 /**
@@ -31,6 +34,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     Bundle bundle;
     TabMenuActivity activity;
     ArrayList<Critic> critics;
+    int bookId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +48,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
         criticAdapter = new CriticAdapter(getActivity(), 0);
         bookAdded=activity.isBookadded();
         critics = activity.getCritics();
+        Book bookDetails = activity.getBookDetails();
+        bookId = bookDetails.getId();
 
         /*
         Critic item = new Critic();
@@ -78,6 +85,8 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Critic item = criticAdapter.getCritic(position);
             Intent detailIntent = new Intent(context, CriticDetailsActivity.class);
+            detailIntent.putExtra("Id", item.getId());
+            detailIntent.putExtra("bookId", bookId);
             detailIntent.putExtra("title", item.getTitle());
             detailIntent.putExtra("author", item.getUser_name());
             detailIntent.putExtra("critictext", item.getCritic());
@@ -86,8 +95,7 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
             detailIntent.putExtra("updatedtime", item.getUpdated_at());
             detailIntent.putExtra("booktitle", bundle.getString("title"));
             detailIntent.putExtra("mine", item.isMine());
-            context.startActivity(detailIntent);
-            Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
+            startActivityForResult(detailIntent, 1);
         }
     };
 
@@ -105,6 +113,62 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
         }
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == 2) {
+            Bundle bundletmp = data.getExtras();
+            Critic critic = new Critic();
+            critic.setMine(bundletmp.getBoolean("Mine"));
+            critic.setId(bundletmp.getInt("Id"));
+            critic.setRating(bundletmp.getFloat("Rating"));
+            critic.setTitle(bundletmp.getString("Title"));
+            critic.setCritic(bundletmp.getString("Critic"));
+            critic.setTime(bundletmp.getString("Time"));
+            critic.setUser_name(bundletmp.getString("User"));
+            critics.add(critic);
+            criticAdapter.notifyDataSetChanged();
+        }else if(resultCode == 3) {
+            Bundle bundletmp = data.getExtras();
+            Critic critic = null;
+            for (int i = 0; i < critics.size(); i++) {
+                if (critics.get(i).getId() == bundletmp.getInt("Id")) {
+                    critic = critics.get(i);
+                }
+            }
+            if (critic != null) {
+                critic.setMine(bundletmp.getBoolean("Mine"));
+                critic.setId(bundletmp.getInt("Id"));
+                critic.setRating(bundletmp.getFloat("Rating"));
+                critic.setTitle(bundletmp.getString("Title"));
+                critic.setCritic(bundletmp.getString("Critic"));
+                critic.setTime(bundletmp.getString("Time"));
+                criticAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(context, "Critic not found!!", Toast.LENGTH_LONG).show();
+            }
+
+        }else if(resultCode == 4){
+            Bundle bundletmp = data.getExtras();
+            boolean del = false;
+            for(int i = 0; i < critics.size(); i++ ){
+                if(critics.get(i).getId() == bundletmp.getInt("Id")){
+                    critics.remove(i);
+                    criticAdapter.notifyDataSetChanged();
+                    del = true;
+                }
+            }
+            if(!del){
+                Toast.makeText(context, "Critic not found!!", Toast.LENGTH_LONG).show();
+            }
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
@@ -112,7 +176,10 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
             case R.id.write_critic:
                 Intent writeIntent = new Intent(context,WriteCriticActivity.class);
                 writeIntent.putExtra("booktitle", bundle.getString("title"));
-                context.startActivity(writeIntent);
+                writeIntent.putExtra("WhatToDO", 0);
+                writeIntent.putExtra("User", "Nagy András");
+                startActivityForResult(writeIntent, 2);
+                //context.startActivity(writeIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

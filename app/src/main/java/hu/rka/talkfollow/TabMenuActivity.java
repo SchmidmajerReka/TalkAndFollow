@@ -58,6 +58,10 @@ public class TabMenuActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
 
+    public TabMenuActivity(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -246,6 +250,10 @@ public class TabMenuActivity extends AppCompatActivity {
 
     public void setCritics(ArrayList<Critic> critics) {
         this.critics = critics;
+    }
+
+    public void addCritic(Critic critic){
+        critics.add(critic);
     }
 
     public void setReaders(ArrayList<Readers> readers) {

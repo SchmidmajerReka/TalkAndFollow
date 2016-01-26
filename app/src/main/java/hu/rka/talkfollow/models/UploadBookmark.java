@@ -6,10 +6,6 @@ package hu.rka.talkfollow.models;
 public class UploadBookmark {
     int bookmark;
 
-    public int getBookmark() {
-        return bookmark;
-    }
-
     public void setBookmark(int bookmark) {
         this.bookmark = bookmark;
     }

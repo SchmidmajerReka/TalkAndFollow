@@ -6,10 +6,6 @@ package hu.rka.talkfollow.models;
 public class UploadProfile {
     String about_me;
 
-    public String getAbout_me() {
-        return about_me;
-    }
-
     public void setAbout_me(String about_me) {
         this.about_me = about_me;
     }

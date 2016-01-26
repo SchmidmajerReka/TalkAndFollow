@@ -102,8 +102,6 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         }
     };
 
-
-
     static class ViewHolder {
         @Bind(R.id.forum_user_name)
         TextView forumUserName;

@@ -19,7 +19,7 @@ public class Book {
     float my_rating;
     String descripton;
     int bookmark;
-    boolean mine; //???????????
+    boolean mine;
 
 
     public int getId() {

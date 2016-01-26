@@ -40,8 +40,6 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
         addRetrofitInterface(ContentInterface.class);
     }
 
-
-
     @Override
     protected String getServerUrl() {
         return "http://emih.konstruktor.hu/";

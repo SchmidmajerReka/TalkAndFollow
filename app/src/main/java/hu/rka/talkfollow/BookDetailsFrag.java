@@ -31,13 +31,16 @@ import hu.rka.talkfollow.models.Book;
 import hu.rka.talkfollow.models.UploadBookAdd;
 import hu.rka.talkfollow.models.UploadBookRead;
 import hu.rka.talkfollow.models.UploadBookmark;
+import hu.rka.talkfollow.models.UploadRating;
 import hu.rka.talkfollow.models.UploadVisibility;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.PostBookAddRequest;
 import hu.rka.talkfollow.requests.PostBookReadRequest;
 import hu.rka.talkfollow.requests.PostBookmarkRequest;
+import hu.rka.talkfollow.requests.PostRatingRequest;
 import hu.rka.talkfollow.requests.PostVisibilityRequest;
 import hu.rka.talkfollow.results.EditBookmarkResult;
+import hu.rka.talkfollow.results.EditRatingResult;
 import hu.rka.talkfollow.results.SetBookAddedResult;
 import hu.rka.talkfollow.results.SetBookReadResult;
 import hu.rka.talkfollow.results.SetVisibilityResult;
@@ -78,8 +81,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         context = getActivity();
         activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
-
-
         bookDetail = activity.getBookDetails();
 
         if(bookDetail!=null) {
@@ -93,6 +94,15 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 myRating.setStepSize(0.5f);
                 myRating.setRating(bookDetail.getMy_rating());
                 myRating.setVisibility(View.VISIBLE);
+                myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
+                        PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
+                        spiceManager.execute(postRatingRequest, new PostRatingListener());
+                    }
+                });
+
                 editBookmark.setOnClickListener(editBookmarkClick);
                 bookFinished.setVisibility(View.VISIBLE);
                 bookFinished.setOnClickListener(bookFinishedClick);
@@ -101,13 +111,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 visibility.setOnClickListener(checkBoxClick);
             } else {
                 myRating.setVisibility(View.INVISIBLE);
-                myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        Log.e("Rating changed: ", String.valueOf(myRating.getRating()));
-                        Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
-                    }
-                });
                 add.setVisibility(View.VISIBLE);
                 add.setOnClickListener(addClick);
             }
@@ -119,63 +122,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         }
         return v;
     }
-
-
-
-    private View.OnClickListener addClick=new View.OnClickListener(){
-
-        @Override
-        public void onClick(View v) {
-
-            UploadBookAdd uploadBookAdd = new UploadBookAdd(bookDetail.getMolyid());
-            PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
-            spiceManager.execute(postBookAddRequest, new AddRequestListener());
-
-
-        }
-    };
-
-
-
-
-    public final class AddRequestListener implements
-            RequestListener<SetBookAddedResult> {
-
-        @Override
-        public void onRequestFailure(SpiceException spiceException) {
-            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onRequestSuccess(SetBookAddedResult result) {
-
-
-            if(result.getMsg() == ""){
-                bookDetail.setMine(true);
-                bookDetail = result.getBook_details();
-                activity.setCritics(result.getCritics());
-                activity.setReaders(result.getReaders());
-                activity.setMessages(result.getForum_messages());
-
-                add.setVisibility(View.GONE);
-                pagenumDetails.setVisibility(View.VISIBLE);
-                bookmark.setText("0");
-                myRating.setVisibility(View.VISIBLE);
-                editBookmark.setOnClickListener(editBookmarkClick);
-                bookFinished.setVisibility(View.VISIBLE);
-                visibilityText.setVisibility(View.VISIBLE);
-                visibility.setVisibility(View.VISIBLE);
-                Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
-
-
-
-            }else{
-                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -198,6 +144,79 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public final class PostRatingListener implements
+            RequestListener<EditRatingResult> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(EditRatingResult result) {
+
+            if(result.getMsg() == ""){
+                bookDetail.setMy_rating(myRating.getRating());
+                Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+                myRating.setRating(bookDetail.getMy_rating());
+            }
+        }
+    }
+
+
+    private View.OnClickListener addClick=new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+
+            UploadBookAdd uploadBookAdd = new UploadBookAdd(bookDetail.getMolyid());
+            PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
+            spiceManager.execute(postBookAddRequest, new AddRequestListener());
+
+
+        }
+    };
+
+    public final class AddRequestListener implements
+            RequestListener<SetBookAddedResult> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(SetBookAddedResult result) {
+
+
+            if(result.getMsg() == ""){
+                bookDetail.setMine(true);
+                bookDetail = result.getBook_details();
+                activity.setBookDetails(result.getBook_details());
+                activity.setCritics(result.getCritics());
+                activity.setReaders(result.getReaders());
+                activity.setMessages(result.getForum_messages());
+
+                add.setVisibility(View.GONE);
+                pagenumDetails.setVisibility(View.VISIBLE);
+                bookmark.setText("0");
+                myRating.setVisibility(View.VISIBLE);
+                editBookmark.setOnClickListener(editBookmarkClick);
+                bookFinished.setVisibility(View.VISIBLE);
+                visibilityText.setVisibility(View.VISIBLE);
+                visibility.setVisibility(View.VISIBLE);
+                Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
+
+
+
+            }else{
+                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -240,8 +259,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         @Override
         public void onRequestSuccess(EditBookmarkResult result) {
-
-            final EditText editText = (EditText) bookmarkDialog.findViewById(R.id.edit_bookmark);
 
             if(result.getMsg() == ""){
                 Toast.makeText(context, "Uploaded", Toast.LENGTH_LONG).show();
@@ -292,25 +309,10 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     }
 
 
-
-    @Override
-    public void onStop() {
-        spiceManager.shouldStop();
-        super.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        spiceManager.start(context);
-
-    }
-
     private View.OnClickListener bookFinishedClick=new View.OnClickListener(){
 
         @Override
         public void onClick(View v) {
-
             UploadBookRead uploadBookRead = new UploadBookRead(bookDetail.getId(), true);
             PostBookReadRequest postBookReadRequest = new PostBookReadRequest(uploadBookRead);
             spiceManager.execute(postBookReadRequest, new BookReadRequestListener());
@@ -334,6 +336,17 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         }
     };
 
+    @Override
+    public void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        spiceManager.start(context);
+
+    }
 
 }

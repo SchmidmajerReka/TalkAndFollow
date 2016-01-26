@@ -86,15 +86,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
             detailIntent.putExtra("title", book.getTitle());
             detailIntent.putExtra("author", book.getAuthors());
             detailIntent.putExtra("starter", 3);
-            /*detailIntent.putExtra("url", book.getPicture());
-            detailIntent.putExtra("title", book.getTitle());
-            detailIntent.putExtra("author", book.getAuthors());
-            detailIntent.putExtra("tags", book.getTags());
-            detailIntent.putExtra("bookmark", book.getBookmark());
-            detailIntent.putExtra("otherrating", book.getAverage_rating());
-            detailIntent.putExtra("myrating", book.getMy_rating());
-            detailIntent.putExtra("description", book.getDescription());
-            */
             context.startActivity(detailIntent);
         }
     };
