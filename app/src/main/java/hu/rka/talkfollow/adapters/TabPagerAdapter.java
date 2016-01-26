@@ -16,6 +16,8 @@ import hu.rka.talkfollow.ReadersListFrag;
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     int starter;
+
+    
     public static String titles[] = {"Book details", "Critics", "Readers", "Forum"};
 
     public TabPagerAdapter(FragmentManager fm, int NumOfTabs) {

@@ -81,7 +81,8 @@ public class TabMenuActivity extends AppCompatActivity {
         starter = bundle.getInt("starter");
         context = this;
 
-
+        GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
+        spiceManager.execute(getDataRequest, new DataRequestListener());
         progress = new ProgressDialog(this);
         progress.setTitle("Please Wait!!");
         progress.setMessage("Wait!!");
@@ -93,63 +94,11 @@ public class TabMenuActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 progress.dismiss();
-                viewPager = (ViewPager) findViewById(R.id.pager);
-                bookadded = bookDetail.isMine();
-                if (bookadded) {
-                    tabNumber = 4;
-                } else {
-                    tabNumber = 3;
-                }
-
-                //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
-
-
-                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-
-                int size = tabNumber;
-                for (int i = 0; i < size; i++) {
-                    tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-                }
-                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-                final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-                viewPager.setAdapter(pagerAdapter);
-
-                if (starter == 3) {
-                    viewPager.setCurrentItem(3);
-                }
-                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        viewPager.setCurrentItem(tab.getPosition());
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                    }
-                });
-
                 super.handleMessage(msg);
             }
         };
-
         progress.show();
-        new Thread()
-        {
-            public void run()
-            {
-                GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
-                spiceManager.execute(getDataRequest, new DataRequestListener());
-            }
 
-        }.start();
 
     }
 
@@ -169,6 +118,49 @@ public class TabMenuActivity extends AppCompatActivity {
             critics = result.getCritics();
             readers = result.getReaders();
             messages = result.getForum_messages();
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            bookadded = bookDetail.isMine();
+            if (bookadded) {
+                tabNumber = 4;
+            } else {
+                tabNumber = 3;
+            }
+
+            //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+
+            int size = tabNumber;
+            for (int i = 0; i < size; i++) {
+                tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
+            }
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+            final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+            viewPager.setAdapter(pagerAdapter);
+
+            if (starter == 3) {
+                viewPager.setCurrentItem(3);
+            }
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                }
+            });
+
 
             handler.sendEmptyMessage(0);
 
