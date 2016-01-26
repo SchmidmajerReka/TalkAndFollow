@@ -90,6 +90,7 @@ public class TabMenuActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 progress.dismiss();
                 viewPager = (ViewPager) findViewById(R.id.pager);
+                bookadded = bookDetail.isMine();
                 if (bookadded) {
                     tabNumber = 4;
                 } else {

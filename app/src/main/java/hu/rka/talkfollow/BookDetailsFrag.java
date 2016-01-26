@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,15 +28,17 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.models.UploadBookAdd;
 import hu.rka.talkfollow.models.UploadBookRead;
 import hu.rka.talkfollow.models.UploadBookmark;
 import hu.rka.talkfollow.models.UploadVisibility;
 import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.PostBookAddRequest;
 import hu.rka.talkfollow.requests.PostBookReadRequest;
 import hu.rka.talkfollow.requests.PostBookmarkRequest;
-import hu.rka.talkfollow.requests.PostProfileRequest;
 import hu.rka.talkfollow.requests.PostVisibilityRequest;
 import hu.rka.talkfollow.results.EditBookmarkResult;
+import hu.rka.talkfollow.results.SetBookAddedResult;
 import hu.rka.talkfollow.results.SetBookReadResult;
 import hu.rka.talkfollow.results.SetVisibilityResult;
 
@@ -98,35 +101,81 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 visibility.setOnClickListener(checkBoxClick);
             } else {
                 myRating.setVisibility(View.INVISIBLE);
+                myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        Log.e("Rating changed: ", String.valueOf(myRating.getRating()));
+                        Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
+                    }
+                });
                 add.setVisibility(View.VISIBLE);
                 add.setOnClickListener(addClick);
             }
             othersRating.setMax(5);
             othersRating.setStepSize(0.5f);
             othersRating.setRating(bookDetail.getAverage_rating());
-            //othersRating.invalidate();
             Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
             description.setText(bookDetail.getDescription());
         }
         return v;
     }
 
+
+
     private View.OnClickListener addClick=new View.OnClickListener(){
 
         @Override
         public void onClick(View v) {
-            bookDetail.setMine(true);
-            add.setVisibility(View.GONE);
-            pagenumDetails.setVisibility(View.VISIBLE);
-            bookmark.setText("0");
-            myRating.setVisibility(View.VISIBLE);
-            editBookmark.setOnClickListener(editBookmarkClick);
-            bookFinished.setVisibility(View.VISIBLE);
-            visibilityText.setVisibility(View.VISIBLE);
-            visibility.setVisibility(View.VISIBLE);
-            Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
+
+            UploadBookAdd uploadBookAdd = new UploadBookAdd(bookDetail.getMolyid());
+            PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
+            spiceManager.execute(postBookAddRequest, new AddRequestListener());
+
+
         }
     };
+
+
+
+
+    public final class AddRequestListener implements
+            RequestListener<SetBookAddedResult> {
+
+        @Override
+        public void onRequestFailure(SpiceException spiceException) {
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(SetBookAddedResult result) {
+
+
+            if(result.getMsg() == ""){
+                bookDetail.setMine(true);
+                bookDetail = result.getBook_details();
+                activity.setCritics(result.getCritics());
+                activity.setReaders(result.getReaders());
+                activity.setMessages(result.getForum_messages());
+
+                add.setVisibility(View.GONE);
+                pagenumDetails.setVisibility(View.VISIBLE);
+                bookmark.setText("0");
+                myRating.setVisibility(View.VISIBLE);
+                editBookmark.setOnClickListener(editBookmarkClick);
+                bookFinished.setVisibility(View.VISIBLE);
+                visibilityText.setVisibility(View.VISIBLE);
+                visibility.setVisibility(View.VISIBLE);
+                Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
+
+
+
+            }else{
+                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
