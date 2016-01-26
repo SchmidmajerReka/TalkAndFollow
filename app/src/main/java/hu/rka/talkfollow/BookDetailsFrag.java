@@ -82,7 +82,16 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
         bookDetail = activity.getBookDetails();
+        setUI(bookDetail);
 
+        return v;
+    }
+
+    public void refreshUI(Book bookDetail) {
+        setUI(bookDetail);
+    }
+
+    private void setUI(final Book bookDetail) {
         if(bookDetail!=null) {
             bookAdded = bookDetail.isMine();
             tags.setText("Tags: " + bookDetail.getTags());
@@ -120,7 +129,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
             description.setText(bookDetail.getDescription());
         }
-        return v;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class TabMenuActivity extends AppCompatActivity {
     TabPagerAdapter pagerAdapter;
     Menu menu;
     int starter;
-    private Handler handler;
+    private static Handler handler;
     private ProgressDialog progress;
 
     TabLayout tabLayout;
@@ -87,69 +87,53 @@ public class TabMenuActivity extends AppCompatActivity {
         progress.setMessage("Wait!!");
         progress.setCancelable(false);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
 
-        handler = new Handler() {
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        bookadded = bookDetail.isMine();
+        if (bookadded) {
+            tabNumber = 4;
+        } else {
+            tabNumber = 3;
+        }
+
+        //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
+
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+
+        int size = tabNumber;
+        for (int i = 0; i < size; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
+        }
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
+        viewPager.setAdapter(pagerAdapter);
+
+        if (starter == 3) {
+            viewPager.setCurrentItem(3);
+        }
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
             @Override
-            public void handleMessage(Message msg) {
-                progress.dismiss();
-                viewPager = (ViewPager) findViewById(R.id.pager);
-                bookadded = bookDetail.isMine();
-                if (bookadded) {
-                    tabNumber = 4;
-                } else {
-                    tabNumber = 3;
-                }
-
-                //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
-
-
-                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-
-
-                int size = tabNumber;
-                for (int i = 0; i < size; i++) {
-                    tabLayout.addTab(tabLayout.newTab().setText(TabPagerAdapter.titles[i]));
-                }
-                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
-                final TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-                viewPager.setAdapter(pagerAdapter);
-
-                if (starter == 3) {
-                    viewPager.setCurrentItem(3);
-                }
-                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        viewPager.setCurrentItem(tab.getPosition());
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-                    }
-                });
-
-                super.handleMessage(msg);
-            }
-        };
-
-        progress.show();
-        new Thread()
-        {
-            public void run()
-            {
-                GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
-                spiceManager.execute(getDataRequest, new DataRequestListener());
+            public void onTabUnselected(TabLayout.Tab tab) {
             }
 
-        }.start();
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+        GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
+        spiceManager.execute(getDataRequest, new DataRequestListener());
 
     }
 
@@ -169,10 +153,13 @@ public class TabMenuActivity extends AppCompatActivity {
             critics = result.getCritics();
             readers = result.getReaders();
             messages = result.getForum_messages();
-
-            handler.sendEmptyMessage(0);
-
-
+            if(bookDetail.isMine()) {
+                pagerAdapter.setSize(3);
+            } else {
+                pagerAdapter.setSize(4);
+            }
+            progress.dismiss();
+            pagerAdapter.refreshChilds(result);
         }
     }
 

@@ -9,18 +9,27 @@ import hu.rka.talkfollow.BookDetailsFrag;
 import hu.rka.talkfollow.CriticListFrag;
 import hu.rka.talkfollow.ForumFrag;
 import hu.rka.talkfollow.ReadersListFrag;
+import hu.rka.talkfollow.results.DetailsResult;
 
 /**
  * Created by Réka on 2016.01.09..
  */
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
-    int starter;
+
     public static String titles[] = {"Book details", "Critics", "Readers", "Forum"};
+    int size = 3;
+
+    private BookDetailsFrag bookDetailsFrag;
 
     public TabPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
-        this.mNumOfTabs = NumOfTabs;
+        this.size = NumOfTabs;
+        bookDetailsFrag = new BookDetailsFrag();
+    }
+
+    public void setSize(int i) {
+        size = i;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -28,7 +37,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
             switch (i) {
                 case 0:
-                    return new BookDetailsFrag();
+                    return bookDetailsFrag;
                 case 1:
                     return new CriticListFrag();
                 case 2:
@@ -40,9 +49,13 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
             }
     }
 
+    public void refreshChilds(DetailsResult result) {
+        bookDetailsFrag.refreshUI(result.getBook_details());
+    }
+
     @Override
     public int getCount() {
-        return mNumOfTabs;
+        return size;
     }
 
     @Override
