@@ -47,6 +47,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                     return readersListFrag;
                 case 3:
                     return new ForumFrag();
+                default:
+                    return new BookDetailsFrag();
             }
     }
 
