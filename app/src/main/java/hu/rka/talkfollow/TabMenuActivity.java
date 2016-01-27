@@ -151,9 +151,16 @@ public class TabMenuActivity extends AppCompatActivity {
             } else {
                 pagerAdapter.setSize(4);
             }
+
             tabLayout.setTabsFromPagerAdapter(pagerAdapter);
+
             progress.dismiss();
             pagerAdapter.refreshChilds(result);
+            if (starter == 3) {
+                tabLayout.setScrollPosition(3, 0f, true);
+                viewPager.setCurrentItem(3);
+
+            }
 
         }
     }

@@ -79,7 +79,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
             int position=(Integer)v.getTag();
             Book book = books.get(position);
 
-
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("molyid", book.getMolyid());
             detailIntent.putExtra("added" ,true);

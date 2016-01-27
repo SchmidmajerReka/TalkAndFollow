@@ -72,6 +72,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     Dialog bookmarkDialog;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     int bookmarktmp;
+    boolean onCreate = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
         bookDetail = activity.getBookDetails();
+        onCreate = true;
         setUI(bookDetail);
 
         return v;
@@ -92,42 +94,44 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
     private void setUI(final Book bookDetail) {
         if(bookDetail!=null) {
-            bookAdded = bookDetail.isMine();
-            tags.setText("Tags: " + bookDetail.getTags());
-            Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
-            if (bookAdded) {
-                pagenumDetails.setVisibility(View.VISIBLE);
-                bookmark.setText(String.valueOf(bookDetail.getBookmark()));
-                myRating.setMax(5);
-                myRating.setStepSize(0.5f);
-                myRating.setRating(bookDetail.getMy_rating());
-                myRating.setVisibility(View.VISIBLE);
-                myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        if(fromUser) {
-                            UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
-                            PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
-                            spiceManager.execute(postRatingRequest, new PostRatingListener());
+            if (onCreate) {
+                bookAdded = bookDetail.isMine();
+                tags.setText("Tags: " + bookDetail.getTags());
+                Picasso.with(context).load(bookDetail.getPicture()).placeholder(R.drawable.bookcover).into(detailCover);
+                if (bookAdded) {
+                    pagenumDetails.setVisibility(View.VISIBLE);
+                    bookmark.setText(String.valueOf(bookDetail.getBookmark()));
+                    myRating.setMax(5);
+                    myRating.setStepSize(0.5f);
+                    myRating.setRating(bookDetail.getMy_rating());
+                    myRating.setVisibility(View.VISIBLE);
+                    myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        @Override
+                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                            if (fromUser) {
+                                UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
+                                PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
+                                spiceManager.execute(postRatingRequest, new PostRatingListener());
+                            }
                         }
-                    }
-                });
+                    });
 
-                editBookmark.setOnClickListener(editBookmarkClick);
-                bookFinished.setVisibility(View.VISIBLE);
-                bookFinished.setOnClickListener(bookFinishedClick);
-                visibilityText.setVisibility(View.VISIBLE);
-                visibility.setVisibility(View.VISIBLE);
-                visibility.setOnClickListener(checkBoxClick);
-            } else {
-                myRating.setVisibility(View.INVISIBLE);
-                add.setVisibility(View.VISIBLE);
-                add.setOnClickListener(addClick);
+                    editBookmark.setOnClickListener(editBookmarkClick);
+                    bookFinished.setVisibility(View.VISIBLE);
+                    bookFinished.setOnClickListener(bookFinishedClick);
+                    visibilityText.setVisibility(View.VISIBLE);
+                    visibility.setVisibility(View.VISIBLE);
+                    visibility.setOnClickListener(checkBoxClick);
+                } else {
+                    myRating.setVisibility(View.INVISIBLE);
+                    add.setVisibility(View.VISIBLE);
+                    add.setOnClickListener(addClick);
+                }
+                othersRating.setMax(5);
+                othersRating.setStepSize(0.5f);
+                othersRating.setRating(bookDetail.getAverage_rating());
+                description.setText(bookDetail.getDescription());
             }
-            othersRating.setMax(5);
-            othersRating.setStepSize(0.5f);
-            othersRating.setRating(bookDetail.getAverage_rating());
-            description.setText(bookDetail.getDescription());
         }
     }
 

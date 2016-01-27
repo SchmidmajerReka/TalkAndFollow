@@ -21,6 +21,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     private BookDetailsFrag bookDetailsFrag;
     private CriticListFrag criticListFrag;
     private ReadersListFrag readersListFrag;
+    private ForumFrag forumFrag;
 
     public TabPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
@@ -28,6 +29,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         bookDetailsFrag = new BookDetailsFrag();
         criticListFrag = new CriticListFrag();
         readersListFrag = new ReadersListFrag();
+        forumFrag = new ForumFrag();
     }
 
     public void setSize(int i) {
@@ -46,7 +48,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                 case 2:
                     return readersListFrag;
                 case 3:
-                    return new ForumFrag();
+                    return forumFrag;
                 default:
                     return new BookDetailsFrag();
             }
@@ -55,7 +57,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
     public void refreshChilds(DetailsResult result) {
         bookDetailsFrag.refreshUI(result.getBook_details());
         criticListFrag.refreshUI(result.getBook_details(), result.getCritics());
-        //readersListFrag.refreshUI(result.getReaders());
+        readersListFrag.refreshUI(result.getReaders());
+        forumFrag.refreshUI(result.getForum_messages());
         notifyDataSetChanged();
     }
 

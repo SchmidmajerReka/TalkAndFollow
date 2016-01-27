@@ -57,11 +57,13 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
 
     private void setUI(final Book bookDetail, final ArrayList<Critic> critics) {
         if(bookDetail != null) {
-            bookAdded = bookDetail.isMine();
-            bookId = bookDetail.getId();
-            criticAdapter.setCritic(critics);
-            listView.setAdapter(criticAdapter);
-            listView.setOnItemClickListener(listItemClick);
+            if(listView != null) {
+                bookAdded = bookDetail.isMine();
+                bookId = bookDetail.getId();
+                criticAdapter.setCritic(critics);
+                listView.setAdapter(criticAdapter);
+                listView.setOnItemClickListener(listItemClick);
+            }
         }
     }
 

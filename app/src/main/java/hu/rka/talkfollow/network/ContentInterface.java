@@ -9,6 +9,7 @@ import hu.rka.talkfollow.models.UploadNewCritic;
 import hu.rka.talkfollow.models.UploadProfile;
 import hu.rka.talkfollow.models.UploadRating;
 import hu.rka.talkfollow.models.UploadVisibility;
+import hu.rka.talkfollow.models.UploadVote;
 import hu.rka.talkfollow.results.BestSellerResult;
 import hu.rka.talkfollow.results.DeleteCriticResult;
 import hu.rka.talkfollow.results.DetailsResult;
@@ -23,6 +24,7 @@ import hu.rka.talkfollow.results.SearchResult;
 import hu.rka.talkfollow.results.SetBookAddedResult;
 import hu.rka.talkfollow.results.SetBookReadResult;
 import hu.rka.talkfollow.results.SetVisibilityResult;
+import hu.rka.talkfollow.results.VoteResult;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -79,8 +81,13 @@ public interface ContentInterface {
     @POST("/MyLibrary.json")
     EditCriticResult editCritic(@Body UploadEditCritic uploadEditCritic);
 
-    //delte_critic
+    //delete_critic
     @POST("/MyLibrary.json")
     DeleteCriticResult deleteCritic(@Body UploadDeleteCritic uploadDeleteCritic);
+
+    //upvote/downvote
+    @POST("/MyLibrary.json")
+    VoteResult vote(@Body UploadVote uploadVote);
+
 }
 //&key=AIzaSyDR0UjdaBWHcXBvBzG88Y4So4o9JeAVhr8")

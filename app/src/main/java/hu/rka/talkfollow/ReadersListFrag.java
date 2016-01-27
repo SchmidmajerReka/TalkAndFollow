@@ -43,8 +43,10 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
 
     private void setUI(final ArrayList<Readers> readers) {
         if(readers != null) {
-            readerAdapter.setReaders(readers);
-            listView.setAdapter(readerAdapter);
+            if(listView!=null) {
+                readerAdapter.setReaders(readers);
+                listView.setAdapter(readerAdapter);
+            }
         }
     }
 

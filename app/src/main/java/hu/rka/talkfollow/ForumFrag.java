@@ -29,7 +29,8 @@ public class ForumFrag extends android.support.v4.app.Fragment {
         ForumAdapter forumAdapter;
         Context context;
         TabMenuActivity activity;
-         ArrayList<ForumMessage> messages;
+        ArrayList<ForumMessage> messages;
+        boolean onCreate = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,18 +40,51 @@ public class ForumFrag extends android.support.v4.app.Fragment {
             context = getActivity();
             messages = activity.getMessages();
             forumAdapter = new ForumAdapter(getActivity(), 0);
-
-            /*for (int i = 0; i < 15; i++) {
-            ForumMessage item = new ForumMessage();
-            item.setAuthor("Author " + i);
-            item.setMessageText("If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough. If you can't explain it quickly you don't understand it well enough.");
-            item.setVoteCount(15);
-            items.add(item);
-            }
-            */
-            forumAdapter.setForumMessages(messages);
-            listView.setAdapter(forumAdapter);
+            onCreate = true;
+            setUI(messages);
             return v;
+    }
+
+    public void refreshUI(ArrayList<ForumMessage> messages) {
+        setUI(messages);
+    }
+
+    private void setUI(final ArrayList<ForumMessage> messages) {
+        if(messages != null) {
+            if(onCreate){
+                forumAdapter.setForumMessages(messages);
+                listView.setAdapter(forumAdapter);
+
+            }
+        }
+    }
+
+    public void upVote(Context context, int id){
+        messages = activity.getMessages();
+        int count = messages.get(id).getApproval_count();
+        messages.get(id).setApproval_count(count + 1);
+        this.setUI(messages);
+        Toast.makeText(context, "UpVote", Toast.LENGTH_LONG).show();
+    }
+
+    public void downVote(Context context){
+        Toast.makeText(context, "DownVote", Toast.LENGTH_LONG).show();
+    }
+
+    public void report(final Context context1){
+        final Dialog reportDialog = new Dialog(context1);
+        reportDialog.setContentView(R.layout.dialog_report);
+        reportDialog.setTitle("Report: ");
+
+        Button sendReport = (Button) reportDialog.findViewById(R.id.send_report);
+        sendReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reportDialog.dismiss();
+                Toast.makeText(context1, "Report sent", Toast.LENGTH_LONG).show();
+            }
+        });
+        reportDialog.show();
     }
 
     @Override

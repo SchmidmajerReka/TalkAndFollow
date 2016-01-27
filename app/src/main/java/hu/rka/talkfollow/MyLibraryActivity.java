@@ -51,42 +51,13 @@ public class MyLibraryActivity extends AppCompatActivity {
         //bookList = (ListView) findViewById(R.id.my_book_list);
         bookAdapter = new BookAdapter(context, 0);
 
-
-        /*for (int i = 0; i < 25; i++) {
-            IndustryIdentifiers industryIdentifiers = new IndustryIdentifiers();
-            industryIdentifiers.setType("ISBN_13");
-            industryIdentifiers.setIdentifier("123456789");
-            ArrayList<IndustryIdentifiers> industryIdentifiersArray = new ArrayList<>();
-            industryIdentifiersArray.add(industryIdentifiers);
-            VolumeInfo volumeInfo = new VolumeInfo();
-            volumeInfo.setTitle("Title: " + (100 - i));
-            ArrayList<String> authors = new ArrayList<>();
-            authors.add("Author: " + (100 - i));
-            volumeInfo.setAuthors(authors);
-            volumeInfo.setDescription("If you can't explain it simply you don't understand it well enough");
-            volumeInfo.setIndustryIdentifierses(industryIdentifiersArray);
-            volumeInfo.setPageCount(165);
-            ArrayList<String> categories = new ArrayList<>();
-            categories.add("Romantic");
-            categories.add("Sci-fi");
-            volumeInfo.setCategories(categories);
-            volumeInfo.setAverageRating(4);
-            Book item = new Book();
-            item.setVolumeInfo(volumeInfo);
-            int randomnumber = rand.nextInt(item.getVolumeInfo().getPageCount())%+1;
-            item.setPageRead(randomnumber);
-            item.setMyRating(5);
-            items.add(item);
-        }*/
         GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
         boolean showChat=true;
         bookAdapter.setBook(items, showChat);
         bookList.setAdapter(bookAdapter);
         bookList.setOnItemClickListener(listItemClick);
-
     }
-
 
     public final class DataRequestListener implements
             RequestListener<MyLibraryResult> {
@@ -134,12 +105,7 @@ public class MyLibraryActivity extends AppCompatActivity {
             detailIntent.putExtra("added" ,true);
             detailIntent.putExtra("title", item.getTitle());
             detailIntent.putExtra("author", item.getAuthors());
-            /*detailIntent.putExtra("tags", item.getVolumeInfo().getCategories());
-            detailIntent.putExtra("bookmark", item.getPageRead());
-            detailIntent.putExtra("otherrating", item.getVolumeInfo().getAverageRating());
-            detailIntent.putExtra("myrating", item.getMyRating());
-            detailIntent.putExtra("description", item.getVolumeInfo().getDescription());
-            */context.startActivity(detailIntent);
+            context.startActivity(detailIntent);
             Toast.makeText(context, "Details", Toast.LENGTH_LONG).show();
         }
     };
