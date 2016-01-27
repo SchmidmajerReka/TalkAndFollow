@@ -47,7 +47,7 @@ public class TabMenuActivity extends AppCompatActivity {
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     ViewPager viewPager;
     Toolbar toolbar;
-    boolean bookadded;
+    boolean bookadded = false;
     Context context;
     int tabNumber;
     TabPagerAdapter pagerAdapter;
@@ -76,15 +76,13 @@ public class TabMenuActivity extends AppCompatActivity {
         critics = new ArrayList<>();
         readers = new ArrayList<>();
         messages = new ArrayList<>();
-
-        bookadded = bundle.getBoolean("added");
         starter = bundle.getInt("starter");
         context = this;
 
 
         progress = new ProgressDialog(this);
         progress.setTitle("Please Wait!!");
-        progress.setMessage("Wait!!");
+        progress.setMessage("Loading data!!");
         progress.setCancelable(false);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.show();
@@ -97,13 +95,8 @@ public class TabMenuActivity extends AppCompatActivity {
             tabNumber = 3;
         }
 
-        //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabNumber);
-
-
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabNumber);
-
-        int size = tabNumber;
 
         // Über cool cucc :D
         tabLayout.setTabsFromPagerAdapter(pagerAdapter);
@@ -112,13 +105,12 @@ public class TabMenuActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-
-
         viewPager.setAdapter(pagerAdapter);
 
         if (starter == 3) {
             viewPager.setCurrentItem(3);
         }
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -155,7 +147,7 @@ public class TabMenuActivity extends AppCompatActivity {
             critics = result.getCritics();
             readers = result.getReaders();
             messages = result.getForum_messages();
-            if(bookDetail.isMine() == false) {
+            if(!bookDetail.isMine()) {
                 pagerAdapter.setSize(3);
             } else {
                 pagerAdapter.setSize(4);
@@ -184,16 +176,10 @@ public class TabMenuActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean isBookadded() {
-        return bookadded;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
-
-
             case android.R.id.home:
                 this.finish();
                 return true;
@@ -229,10 +215,6 @@ public class TabMenuActivity extends AppCompatActivity {
 
     public void setCritics(ArrayList<Critic> critics) {
         this.critics = critics;
-    }
-
-    public void addCritic(Critic critic){
-        critics.add(critic);
     }
 
     public void setReaders(ArrayList<Readers> readers) {

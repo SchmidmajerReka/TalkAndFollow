@@ -51,20 +51,18 @@ import hu.rka.talkfollow.results.SetVisibilityResult;
  */
 public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
-    @Nullable@Bind(R.id.detail_tags) TextView tags;
-    @Nullable@Bind(R.id.detail_bookmark) TextView bookmark;
-    @Nullable@Bind(R.id.others_ratingBar) RatingBar othersRating;
-    @Nullable@Bind(R.id.my_ratingBar) RatingBar myRating;
-    @Nullable@Bind(R.id.detail_description) TextView description;
-    @Nullable@Bind(R.id.add_button) Button add;
-    @Nullable@Bind(R.id.detail_cover) ImageView detailCover;
-    @Nullable@Bind(R.id.detail_pagenum)
-    LinearLayout pagenumDetails;
-    @Nullable@Bind(R.id.edit_detail_bookmark) ImageView editBookmark;
-    @Nullable@Bind(R.id.detail_finished_button) Button bookFinished;
-    @Nullable@Bind(R.id.detail_visibility_text)
-    TextView visibilityText;
-    @Nullable@Bind(R.id.detail_visibility)
+    @Bind(R.id.detail_tags) TextView tags;
+    @Bind(R.id.detail_bookmark) TextView bookmark;
+    @Bind(R.id.others_ratingBar) RatingBar othersRating;
+    @Bind(R.id.my_ratingBar) RatingBar myRating;
+    @Bind(R.id.detail_description) TextView description;
+    @Bind(R.id.add_button) Button add;
+    @Bind(R.id.detail_cover) ImageView detailCover;
+    @Bind(R.id.detail_pagenum) LinearLayout pagenumDetails;
+    @Bind(R.id.edit_detail_bookmark) ImageView editBookmark;
+    @Bind(R.id.detail_finished_button) Button bookFinished;
+    @Bind(R.id.detail_visibility_text) TextView visibilityText;
+    @Bind(R.id.detail_visibility)
     CheckBox visibility;
     Context context;
     boolean bookAdded;
@@ -73,6 +71,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
     Book bookDetail;
     Dialog bookmarkDialog;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
+    int bookmarktmp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,9 +105,11 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                     @Override
                     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
-                        PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
-                        spiceManager.execute(postRatingRequest, new PostRatingListener());
+                        if(fromUser) {
+                            UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
+                            PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
+                            spiceManager.execute(postRatingRequest, new PostRatingListener());
+                        }
                     }
                 });
 
@@ -126,7 +127,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             othersRating.setMax(5);
             othersRating.setStepSize(0.5f);
             othersRating.setRating(bookDetail.getAverage_rating());
-//            Toast.makeText(context, "AverageRating: " + othersRating.getRating(), Toast.LENGTH_LONG).show();
             description.setText(bookDetail.getDescription());
         }
     }
@@ -160,17 +160,17 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-//            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onRequestSuccess(EditRatingResult result) {
 
-            if(result.getMsg() == ""){
+            if(result.getMsg().equals("")){
                 bookDetail.setMy_rating(myRating.getRating());
-//                Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Rating changed: " + String.valueOf(myRating.getRating()), Toast.LENGTH_LONG).show();
             }else{
-//                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
                 myRating.setRating(bookDetail.getMy_rating());
             }
         }
@@ -181,12 +181,9 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         @Override
         public void onClick(View v) {
-
             UploadBookAdd uploadBookAdd = new UploadBookAdd(bookDetail.getMolyid());
             PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
             spiceManager.execute(postBookAddRequest, new AddRequestListener());
-
-
         }
     };
 
@@ -202,7 +199,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         public void onRequestSuccess(SetBookAddedResult result) {
 
 
-            if(result.getMsg() == ""){
+            if(result.getMsg().equals("")){
                 bookDetail.setMine(true);
                 bookDetail = result.getBook_details();
                 activity.setBookDetails(result.getBook_details());
@@ -235,8 +232,6 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             bookmarkDialog.setContentView(R.layout.dialog_edit_bookmark);
             bookmarkDialog.setTitle("Set bookmark page: ");
             Button setBookmark = (Button) bookmarkDialog.findViewById(R.id.edit_bookmark_confirm);
-            final EditText editText = (EditText) bookmarkDialog.findViewById(R.id.edit_bookmark);
-            editText.setText(bookmark.getText());
             setBookmark.setOnClickListener(setBookmarkClick);
             bookmarkDialog.show();
             bookFinished.setBackgroundResource(android.R.drawable.btn_default);
@@ -250,7 +245,8 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             Toast.makeText(context, "Edit number", Toast.LENGTH_LONG).show();
             UploadBookmark uploadBookmark = new UploadBookmark();
             final EditText editText = (EditText) bookmarkDialog.findViewById(R.id.edit_bookmark);
-            uploadBookmark.setBookmark(Integer.valueOf(String.valueOf(editText.getText())));
+            bookmarktmp = Integer.valueOf(String.valueOf(editText.getText()));
+            uploadBookmark.setBookmark(bookmarktmp);
             PostBookmarkRequest postBookmarkRequest = new PostBookmarkRequest(uploadBookmark);
             spiceManager.execute(postBookmarkRequest, new BookmarkRequestListener());
             bookmarkDialog.dismiss();
@@ -268,8 +264,10 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         @Override
         public void onRequestSuccess(EditBookmarkResult result) {
 
-            if(result.getMsg() == ""){
+            if(result.getMsg().equals("")){
                 Toast.makeText(context, "Uploaded", Toast.LENGTH_LONG).show();
+                bookmark.setText(String.valueOf(bookmarktmp));
+
             }else{
                 Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
             }
@@ -287,7 +285,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         @Override
         public void onRequestSuccess(SetBookReadResult result) {
 
-            if(result.getMsg() == ""){
+            if(result.getMsg().equals("")){
                 bookFinished.setBackgroundColor(Color.YELLOW);
                 Toast.makeText(context, "Book Finished", Toast.LENGTH_LONG).show();
                 bookmark.setText("0");
@@ -308,7 +306,7 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         @Override
         public void onRequestSuccess(SetVisibilityResult result) {
 
-            if(result.getMsg() == ""){
+            if(result.getMsg().equals("")){
                 Toast.makeText(context, "Visibility Changed", Toast.LENGTH_LONG).show();
             }else {
                 Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();

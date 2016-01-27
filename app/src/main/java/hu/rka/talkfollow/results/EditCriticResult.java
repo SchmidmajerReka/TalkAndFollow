@@ -5,7 +5,7 @@ package hu.rka.talkfollow.results;
  */
 public class EditCriticResult {
 
-    String msg;
+    String msg = "";
 
     public String getMsg() {
         return msg;

@@ -22,30 +22,30 @@ public class ReadersListFrag extends android.support.v4.app.Fragment {
     ListView listView;
     ReaderAdapter readerAdapter;
     Context context;
-    TabMenuActivity activity;
     ArrayList<Readers> readers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_reader, container, false);
-        listView = (ListView) v.findViewById(R.id.reader_list);
-        activity = (TabMenuActivity) getActivity();
         context = getActivity();
+        TabMenuActivity activity = (TabMenuActivity) getActivity();
+        listView = (ListView) v.findViewById(R.id.reader_list);
         readers = activity.getReaders();
         readerAdapter = new ReaderAdapter(getActivity(), 0);
-
-        /*for (int i = 0; i < 25; i++) {
-            Readers item = new Readers();
-            item.setName("FirstName LastName " + i);
-            item.setRate(3);
-            item.setDate("2016.01.09");
-            items.add(item);
-        }*/
-
-        readerAdapter.setReaders(readers);
-        listView.setAdapter(readerAdapter);
+        setUI(readers);
 
         return v;
+    }
+
+    public void refreshUI(ArrayList<Readers> readers) {
+        setUI(readers);
+    }
+
+    private void setUI(final ArrayList<Readers> readers) {
+        if(readers != null) {
+            readerAdapter.setReaders(readers);
+            listView.setAdapter(readerAdapter);
+        }
     }
 
     @Override

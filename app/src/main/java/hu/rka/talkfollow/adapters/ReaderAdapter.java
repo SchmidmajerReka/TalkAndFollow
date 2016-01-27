@@ -26,6 +26,7 @@ import hu.rka.talkfollow.models.Readers;
  * Created by Réka on 2016.01.09..
  */
 public class ReaderAdapter extends ArrayAdapter<Readers> {
+
     ArrayList<Readers> readers = new ArrayList<>();
     LayoutInflater inflater;
     Context context;

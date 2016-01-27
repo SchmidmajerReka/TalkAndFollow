@@ -125,7 +125,6 @@ public class CriticDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case android.R.id.home:
-
                 if(edited){
                     Intent result = new Intent();
                     result.putExtra("Mine", true);

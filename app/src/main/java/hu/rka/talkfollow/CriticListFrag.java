@@ -32,7 +32,6 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     boolean bookAdded;
     Context context;
     Bundle bundle;
-    TabMenuActivity activity;
     ArrayList<Critic> critics;
     int bookId;
 
@@ -40,45 +39,32 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_critic, container, false);
-        listView = (ListView) v.findViewById(R.id.critic_list);
-
         context = getActivity();
         TabMenuActivity activity = (TabMenuActivity) getActivity();
         bundle = activity.getBundle();
-        criticAdapter = new CriticAdapter(getActivity(), 0);
-        bookAdded=activity.isBookadded();
+        listView = (ListView) v.findViewById(R.id.critic_list);
+        Book bookDetail = activity.getBookDetails();
         critics = activity.getCritics();
-        Book bookDetails = activity.getBookDetails();
-        bookId = bookDetails.getId();
+        criticAdapter = new CriticAdapter(getActivity(), 0);
+        setUI(bookDetail, critics);
 
-        /*
-        Critic item = new Critic();
-        item.setTitle("Saját Kritikám");
-        item.setAuthor("Én");
-        item.setCriticText("Ügyes Okos Szép Kritika");
-        item.setRate(4);
-        item.setCreatedTime("2016.01.10");
-        item.setUpdatedTime("2016.01.10");
-        item.setMine(true);
-        items.add(item);
-
-        for (int i = 0; i < 30; i++) {
-            item = new Critic();
-            item.setTitle("Title " + i);
-            item.setAuthor("Author " + i);
-            item.setCriticText("BlablaBlaasdfsalkuhuslaldhfhfhalikawefjcguisadhasjdeuizBLAblaBlabLA");
-            item.setRate(3);
-            item.setCreatedTime("2015.10.10");
-            item.setUpdatedTime("2016.01.10");
-            item.setMine(false);
-            items.add(item);
-        }
-        */
-        criticAdapter.setCritic(critics);
-        listView.setAdapter(criticAdapter);
-        listView.setOnItemClickListener(listItemClick);
         return v;
     }
+
+    public void refreshUI(Book bookDetail, ArrayList<Critic> critics) {
+        setUI(bookDetail, critics);
+    }
+
+    private void setUI(final Book bookDetail, final ArrayList<Critic> critics) {
+        if(bookDetail != null) {
+            bookAdded = bookDetail.isMine();
+            bookId = bookDetail.getId();
+            criticAdapter.setCritic(critics);
+            listView.setAdapter(criticAdapter);
+            listView.setOnItemClickListener(listItemClick);
+        }
+    }
+
 
     AdapterView.OnItemClickListener listItemClick = new AdapterView.OnItemClickListener(){
         @Override
@@ -179,7 +165,6 @@ public class CriticListFrag extends android.support.v4.app.Fragment {
                 writeIntent.putExtra("WhatToDO", 0);
                 writeIntent.putExtra("User", "Nagy András");
                 startActivityForResult(writeIntent, 2);
-                //context.startActivity(writeIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

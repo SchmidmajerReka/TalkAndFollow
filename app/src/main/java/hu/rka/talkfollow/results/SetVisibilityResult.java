@@ -5,7 +5,7 @@ package hu.rka.talkfollow.results;
  */
 public class SetVisibilityResult {
 
-    String msg;
+    String msg="";
 
     public String getMsg() {
         return msg;

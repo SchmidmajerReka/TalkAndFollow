@@ -11,6 +11,7 @@ import hu.rka.talkfollow.models.Readers;
  * Created by Réka on 2016.01.21..
  */
 public class DetailsResult {
+
     Book book_details;
     ArrayList<Critic> critics;
     ArrayList<Readers> readers;

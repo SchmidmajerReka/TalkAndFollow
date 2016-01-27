@@ -11,7 +11,8 @@ import hu.rka.talkfollow.models.Readers;
  * Created by Réka on 2016.01.26..
  */
 public class SetBookAddedResult {
-    String msg;
+
+    String msg="";
 
     Book book_details;
     ArrayList<Critic> critics;
