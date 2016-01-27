@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Talk&amp;Follow.iml" filepath="$PROJECT_DIR$/Talk&amp;Follow.iml" />
       <module fileurl="file://$PROJECT_DIR$/TalkAndFollow.iml" filepath="$PROJECT_DIR$/TalkAndFollow.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

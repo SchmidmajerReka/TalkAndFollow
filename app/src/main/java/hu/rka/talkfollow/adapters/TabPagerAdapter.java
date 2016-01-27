@@ -15,14 +15,6 @@ import hu.rka.talkfollow.results.DetailsResult;
  * Created by Réka on 2016.01.09..
  */
 public class TabPagerAdapter extends FragmentStatePagerAdapter {
-<<<<<<< HEAD
-
-=======
-    int mNumOfTabs;
-    int starter;
-
-    
->>>>>>> API_használat
     public static String titles[] = {"Book details", "Critics", "Readers", "Forum"};
     int size = 3;
 
@@ -55,8 +47,6 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
                     return readersListFrag;
                 case 3:
                     return new ForumFrag();
-                default:
-                    return new BookDetailsFrag();
             }
     }
 
