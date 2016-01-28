@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import hu.rka.talkfollow.CriticDetailsActivity;
 import hu.rka.talkfollow.ForumFrag;
 import hu.rka.talkfollow.R;
+import hu.rka.talkfollow.models.Book;
 import hu.rka.talkfollow.models.Critic;
 import hu.rka.talkfollow.models.ForumMessage;
 import hu.rka.talkfollow.network.ContentSpiceService;
@@ -38,9 +39,10 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
     ForumMessage message;
 
 
-    public ForumAdapter (Context context, int resource){
+
+    public ForumAdapter (Context context, int resource, ForumFrag forumFrag){
         super(context,resource);
-        forumFrag = new ForumFrag();
+        this.forumFrag = forumFrag;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
@@ -64,9 +66,11 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         holder.forumUserName.setText(message.getUser_name());
         holder.messageText.setText(message.getMessage());
         holder.voteCount.setText(String.valueOf(message.getApproval_count()));
+        holder.report.setTag(position);
         holder.report.setOnClickListener(reportClick);
-        holder.upVote.setTag(message.getId());
+        holder.upVote.setTag(position);
         holder.upVote.setOnClickListener(upClick);
+        holder.downVote.setTag(position);
         holder.downVote.setOnClickListener(downClick);
         Picasso.with(context).load(message.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.forumPicture);
         return rowView;
@@ -81,22 +85,23 @@ public class ForumAdapter extends ArrayAdapter<ForumMessage> {
         @Override
         public void onClick(View v) {
             int selected_id = (Integer) v.getTag();
-            //Toast.makeText(context, "Id: " + selected_id, Toast.LENGTH_LONG).show();
-            forumFrag.upVote(context, selected_id);
+            forumFrag.upVote(selected_id);
         }
     };
 
     private View.OnClickListener downClick = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-           forumFrag.downVote(context);
+            int selected_id = (Integer) v.getTag();
+            forumFrag.downVote(selected_id);
         }
     };
 
     private View.OnClickListener reportClick = new View.OnClickListener(){
         @Override
-        public void onClick(View view) {
-           forumFrag.report(context);
+        public void onClick(View v) {
+            int selected_id = (Integer) v.getTag();
+            forumFrag.report(context, selected_id);
         }
     };
 

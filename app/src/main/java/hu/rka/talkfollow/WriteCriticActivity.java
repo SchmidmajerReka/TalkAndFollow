@@ -93,8 +93,6 @@ public class WriteCriticActivity extends AppCompatActivity{
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_write_critic, menu);

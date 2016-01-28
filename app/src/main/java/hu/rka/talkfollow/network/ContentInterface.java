@@ -1,13 +1,16 @@
 package hu.rka.talkfollow.network;
 
+import hu.rka.talkfollow.models.ForumMessage;
 import hu.rka.talkfollow.models.UploadBookAdd;
 import hu.rka.talkfollow.models.UploadBookRead;
 import hu.rka.talkfollow.models.UploadBookmark;
 import hu.rka.talkfollow.models.UploadDeleteCritic;
 import hu.rka.talkfollow.models.UploadEditCritic;
+import hu.rka.talkfollow.models.UploadForumMessage;
 import hu.rka.talkfollow.models.UploadNewCritic;
 import hu.rka.talkfollow.models.UploadProfile;
 import hu.rka.talkfollow.models.UploadRating;
+import hu.rka.talkfollow.models.UploadReport;
 import hu.rka.talkfollow.models.UploadVisibility;
 import hu.rka.talkfollow.models.UploadVote;
 import hu.rka.talkfollow.results.BestSellerResult;
@@ -17,9 +20,11 @@ import hu.rka.talkfollow.results.EditBookmarkResult;
 import hu.rka.talkfollow.results.EditCriticResult;
 import hu.rka.talkfollow.results.EditProfileResult;
 import hu.rka.talkfollow.results.EditRatingResult;
+import hu.rka.talkfollow.results.ForumMessageResult;
 import hu.rka.talkfollow.results.MyProfileResult;
 import hu.rka.talkfollow.results.MyLibraryResult;
 import hu.rka.talkfollow.results.NewCriticResult;
+import hu.rka.talkfollow.results.ReportResult;
 import hu.rka.talkfollow.results.SearchResult;
 import hu.rka.talkfollow.results.SetBookAddedResult;
 import hu.rka.talkfollow.results.SetBookReadResult;
@@ -88,6 +93,14 @@ public interface ContentInterface {
     //upvote/downvote
     @POST("/MyLibrary.json")
     VoteResult vote(@Body UploadVote uploadVote);
+
+    //report_forum_message
+    @POST("/MyLibrary.json")
+    ReportResult report(@Body UploadReport uploadReport);
+
+    //write_forum_message
+    @POST("/MyLibrary.json")
+    ForumMessageResult writeMessage(@Body UploadForumMessage uploadForumMessage);
 
 }
 //&key=AIzaSyDR0UjdaBWHcXBvBzG88Y4So4o9JeAVhr8")
