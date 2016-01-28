@@ -1,6 +1,5 @@
 package hu.rka.talkfollow.network;
 
-import hu.rka.talkfollow.models.ForumMessage;
 import hu.rka.talkfollow.models.UploadBookAdd;
 import hu.rka.talkfollow.models.UploadBookRead;
 import hu.rka.talkfollow.models.UploadBookmark;
@@ -11,6 +10,7 @@ import hu.rka.talkfollow.models.UploadNewCritic;
 import hu.rka.talkfollow.models.UploadProfile;
 import hu.rka.talkfollow.models.UploadRating;
 import hu.rka.talkfollow.models.UploadReport;
+import hu.rka.talkfollow.models.UploadUser;
 import hu.rka.talkfollow.models.UploadVisibility;
 import hu.rka.talkfollow.models.UploadVote;
 import hu.rka.talkfollow.results.BestSellerResult;
@@ -21,6 +21,7 @@ import hu.rka.talkfollow.results.EditCriticResult;
 import hu.rka.talkfollow.results.EditProfileResult;
 import hu.rka.talkfollow.results.EditRatingResult;
 import hu.rka.talkfollow.results.ForumMessageResult;
+import hu.rka.talkfollow.results.UserResult;
 import hu.rka.talkfollow.results.MyProfileResult;
 import hu.rka.talkfollow.results.MyLibraryResult;
 import hu.rka.talkfollow.results.NewCriticResult;
@@ -101,6 +102,10 @@ public interface ContentInterface {
     //write_forum_message
     @POST("/MyLibrary.json")
     ForumMessageResult writeMessage(@Body UploadForumMessage uploadForumMessage);
+
+    //login
+    @POST("/MyLibrary.json")
+    UserResult login(@Body UploadUser uploadUser);
 
 }
 //&key=AIzaSyDR0UjdaBWHcXBvBzG88Y4So4o9JeAVhr8")

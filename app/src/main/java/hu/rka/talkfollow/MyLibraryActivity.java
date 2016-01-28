@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +13,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +35,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
+import hu.rka.talkfollow.models.UploadUser;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.GetMyLibraryRequest;
 import hu.rka.talkfollow.results.MyLibraryResult;
@@ -38,16 +51,23 @@ public class MyLibraryActivity extends AppCompatActivity {
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     Random rand = new Random();
     ArrayList<Book> items = new ArrayList<>();
+    Profile profile;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_my_library);
         ButterKnife.bind(this);
         context=this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Library");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //bookList = (ListView) findViewById(R.id.my_book_list);
         bookAdapter = new BookAdapter(context, 0);
 
@@ -121,6 +141,10 @@ public class MyLibraryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case  android.R.id.home:
+                //LoginManager.getInstance().logOut();
+                this.finish();
+                return true;
             case R.id.add_book:
                 Intent detailIntent = new Intent(context, AddBookActivity.class);
                 context.startActivity(detailIntent);

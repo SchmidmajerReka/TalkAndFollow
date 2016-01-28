@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -43,6 +44,8 @@ public class MyProfileActivity extends AppCompatActivity {
     String description;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     Dialog aboutMeDialog;
+    AccessToken accessToken;
+
 
     @Bind(R.id.profile_pic)
     ImageView profilePic;
@@ -74,6 +77,8 @@ public class MyProfileActivity extends AppCompatActivity {
         }
         aboutMe.setText("Short introduction about me...");
         */
+        accessToken = AccessToken.getCurrentAccessToken();
+
         GetMyProfileRequest getDataRequest = new GetMyProfileRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
 
@@ -98,6 +103,8 @@ public class MyProfileActivity extends AppCompatActivity {
             bookNumView.setText("Number of books: " + result.getBooks_number());
             bookFinished.setText("Finished: " + result.getFinished());
             aboutMe.setText(result.getAbout_me());
+            Picasso.with(context).load("https://graph.facebook.com/" + accessToken.getUserId()+ "/picture?type=large").into(profilePic);
+
         }
     }
 

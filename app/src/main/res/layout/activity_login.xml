@@ -64,14 +64,13 @@
             android:text="or talk about your favourites!" />
 
 
-        <ImageView
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/login"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
 
     </LinearLayout>
 
