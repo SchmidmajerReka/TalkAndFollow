@@ -42,7 +42,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -103,6 +104,9 @@
         <service
             android:name=".network.ContentSpiceService">
         </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="67817daeb0bce505e84bab0f0526b3d487dc20ab" />
     </application>
 
 </manifest>

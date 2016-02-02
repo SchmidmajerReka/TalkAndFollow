@@ -5,11 +5,13 @@ package hu.rka.talkfollow.models;
  */
 public class UploadUser {
 
-    String user_id;
-    String name;
+    String facebook_id;
+    String first_name;
+    String last_name;
 
-    public UploadUser(String user_id, String name) {
-        this.user_id = user_id;
-        this.name = name;
+    public UploadUser(String facebook_id, String first_name, String last_name) {
+        this.facebook_id = facebook_id;
+        this.first_name = first_name;
+        this. last_name = last_name;
     }
 }

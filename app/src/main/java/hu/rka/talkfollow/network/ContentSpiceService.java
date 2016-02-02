@@ -7,6 +7,8 @@ import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
+import hu.rka.talkfollow.PreferencesHelper;
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.Request;
 import retrofit.client.UrlConnectionClient;
@@ -28,9 +30,21 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
     }
 
     public static RestAdapter.Builder getRestAdapterBuilder() {
+        RequestInterceptor requestInterceptor = new RequestInterceptor() {
+            @Override
+            public void intercept(RequestFacade request) {
+                String token = PreferencesHelper.getStringByKey(context, "Auth-Token", "");
+                if(token != null && !token.equalsIgnoreCase("")){
+                    request.addHeader("Auth-Token", token);
+                }
+            }
+        };
+
+
         return new RestAdapter.Builder()
-                .setEndpoint("http://emih.konstruktor.hu/")
-                .setClient(new TimeoutUrlConnection());
+                .setEndpoint("http://talkandfollow.konstruktor.hu/api/v1")
+                .setClient(new TimeoutUrlConnection())
+                .setRequestInterceptor(requestInterceptor);
     }
 
     @Override

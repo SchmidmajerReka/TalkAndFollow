@@ -1,7 +1,9 @@
 package hu.rka.talkfollow;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -140,29 +142,32 @@ public class CriticDetailsActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.critic_delete:
-                confirmDialog = new Dialog(context);
-                confirmDialog.setContentView(R.layout.dialog_confirm_delete);
-                confirmDialog.setTitle("Delete this critic?");
-                Button yesButton = (Button) confirmDialog.findViewById(R.id.confirm_yes);
-                yesButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        UploadDeleteCritic uploadDeleteCritic = new UploadDeleteCritic(bundle.getInt("Id"));
-                        PostDeleteCriticRequest postDeleteCriticRequest = new PostDeleteCriticRequest(uploadDeleteCritic);
-                        spiceManager.execute(postDeleteCriticRequest, new DeleteCriticListener());
-
-
-                    }
-                });
-                Button noButton = (Button) confirmDialog.findViewById(R.id.confirm_no);
-                noButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        confirmDialog.dismiss();
-                    }
-                });
-                confirmDialog.show();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+                // set title
+                alertDialogBuilder.setTitle("Delete");
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Click yes to delete critic!")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                UploadDeleteCritic uploadDeleteCritic = new UploadDeleteCritic(bundle.getInt("Id"));
+                                PostDeleteCriticRequest postDeleteCriticRequest = new PostDeleteCriticRequest(uploadDeleteCritic);
+                                spiceManager.execute(postDeleteCriticRequest, new DeleteCriticListener());
+                            }
+                        })
+                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
                 return true;
             case R.id.critic_edit:
                 Intent editIntent = new Intent(context, WriteCriticActivity.class);
@@ -174,6 +179,7 @@ public class CriticDetailsActivity extends AppCompatActivity {
                 editIntent.putExtra("booktitle", bundle.getString("booktitle"));
                 editIntent.putExtra("WhatToDo", 1);
                 startActivityForResult(editIntent, 3);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,20 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,7 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.adapters.BookAdapter;
 import hu.rka.talkfollow.models.Book;
-import hu.rka.talkfollow.models.UploadUser;
 import hu.rka.talkfollow.network.ContentSpiceService;
 import hu.rka.talkfollow.requests.GetMyLibraryRequest;
 import hu.rka.talkfollow.results.MyLibraryResult;
@@ -52,15 +41,13 @@ public class MyLibraryActivity extends AppCompatActivity {
     Random rand = new Random();
     ArrayList<Book> items = new ArrayList<>();
     Profile profile;
+    Bundle bundle;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         setContentView(R.layout.activity_my_library);
         ButterKnife.bind(this);
         context=this;
@@ -70,16 +57,17 @@ public class MyLibraryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //bookList = (ListView) findViewById(R.id.my_book_list);
         bookAdapter = new BookAdapter(context, 0);
-
-        GetMyLibraryRequest getDataRequest = new GetMyLibraryRequest();
-        spiceManager.execute(getDataRequest, new DataRequestListener());
+        bundle = getIntent().getExtras();
+        GetMyLibraryRequest getMyLibraryRequest = new GetMyLibraryRequest();
+        spiceManager.execute(getMyLibraryRequest, new myLibraryListener());
         boolean showChat=true;
         bookAdapter.setBook(items, showChat);
         bookList.setAdapter(bookAdapter);
         bookList.setOnItemClickListener(listItemClick);
+        Toast.makeText(context, "Auth-Token: " + PreferencesHelper.getStringByKey(context, "Auth-Token", ""), Toast.LENGTH_LONG).show();
     }
 
-    public final class DataRequestListener implements
+    public final class myLibraryListener implements
             RequestListener<MyLibraryResult> {
 
         @Override
@@ -89,16 +77,12 @@ public class MyLibraryActivity extends AppCompatActivity {
 
         @Override
         public void onRequestSuccess(MyLibraryResult result) {
-            ArrayList<Book> itemstmp = result.getItems();
-            if (itemstmp != null){
+            if(result.getError().equals("")){
                 Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
-                boolean showChat = true;
-                for(int i=0; i<itemstmp.size(); i++){
-                    items.add(itemstmp.get(i));
-                }
-                bookAdapter.setBook(items, showChat);
-            }else {
-                Toast.makeText(context, "Book not found", Toast.LENGTH_LONG).show();
+                int size = result.getBooks().size();
+                bookAdapter.setBook(result.getBooks(), true);
+            }else{
+                Toast.makeText(context, "Error: " + result.getError(), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -142,7 +126,7 @@ public class MyLibraryActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case  android.R.id.home:
-                //LoginManager.getInstance().logOut();
+                LoginManager.getInstance().logOut();
                 this.finish();
                 return true;
             case R.id.add_book:
@@ -150,9 +134,8 @@ public class MyLibraryActivity extends AppCompatActivity {
                 context.startActivity(detailIntent);
                 return true;
             case R.id.my_profile:
-                detailIntent = new Intent(context, MyProfileActivity.class);
-                //Toast.makeText(context, "MyProfile", Toast.LENGTH_LONG).show();
-                context.startActivity(detailIntent);
+                Intent profileIntent = new Intent(context, MyProfileActivity.class);
+                context.startActivity(profileIntent);
                 return true;
             case R.id.order_author:
                 bookAdapter.orderAuthor();
@@ -163,5 +146,11 @@ public class MyLibraryActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        LoginManager.getInstance().logOut();
+        this.finish();
     }
 }

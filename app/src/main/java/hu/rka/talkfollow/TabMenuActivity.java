@@ -135,7 +135,7 @@ public class TabMenuActivity extends AppCompatActivity {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            handler.sendEmptyMessage(0);
+            //handler.sendEmptyMessage(0);
             finish();
             Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }

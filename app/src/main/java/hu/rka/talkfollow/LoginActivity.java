@@ -1,7 +1,10 @@
 package hu.rka.talkfollow;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +13,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -23,12 +29,14 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import io.fabric.sdk.android.Fabric;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,11 +60,13 @@ public class LoginActivity extends AppCompatActivity {
     AccessTokenTracker accessTokenTracker;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     Profile profile;
-
+    private ProfileTracker mProfileTracker;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -76,15 +86,37 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions("public_profile");
 
 
-
-        updateWithToken(AccessToken.getCurrentAccessToken());
-
-
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 accessToken = loginResult.getAccessToken();
 
+                if(Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                            Log.v("facebook - profile", profile2.getFirstName());
+                            mProfileTracker.stopTracking();
+
+                            progress = new ProgressDialog(context);
+                            progress.setTitle("Loading your profile");
+                            progress.setMessage("Please wait!");
+                            progress.setCancelable(false);
+                            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            progress.show();
+
+
+                            UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(),Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
+                            PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
+                            spiceManager.execute(postUserRequest, new LoginRequestListener());
+                        }
+                    };
+                    mProfileTracker.startTracking();
+                }
+                else {
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.v("facebook - profile", profile.getFirstName());
+                }
                 /*GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -104,16 +136,6 @@ public class LoginActivity extends AppCompatActivity {
                 parameters.putString("fields", "id,name,email,about_me");
                 request.setParameters(parameters);
                 request.executeAsync();*/
-
-
-                Intent detailIntent = new Intent(context, MyLibraryActivity.class);
-
-                profile = Profile.getCurrentProfile();
-                UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(),Profile.getCurrentProfile().getName());
-                PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
-                spiceManager.execute(postUserRequest, new LoginRequestListener() );
-
-
             }
 
             @Override
@@ -134,10 +156,17 @@ public class LoginActivity extends AppCompatActivity {
 
         if (currentAccessToken != null) {
             if(Profile.getCurrentProfile() != null) {
+                progress = new ProgressDialog(context);
+                progress.setTitle("Loading your profile");
+                progress.setMessage("Please wait!");
+                progress.setCancelable(false);
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.show();
                 profile = Profile.getCurrentProfile();
-                UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(), Profile.getCurrentProfile().getName());
+                UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(), Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
                 PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
                 spiceManager.execute(postUserRequest, new LoginRequestListener());
+
             }
 
         }
@@ -149,18 +178,37 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            progress.dismiss();
+            LoginManager.getInstance().logOut();
             Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onRequestSuccess(UserResult result) {
 
-            if(result.getMsg().equals("")){
-                Intent intent = new Intent(context, MyLibraryActivity.class);
-                //intent.putExtra("Token", result.getToken());
+            if(result.getError().equals("")){
+                if(Profile.getCurrentProfile() == null) {
+                    mProfileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                            Log.v("facebook - profile", profile2.getFirstName());
+                            mProfileTracker.stopTracking();
+                        }
+                    };
+                    mProfileTracker.startTracking();
+                }
+                else {
+                    Profile profile = Profile.getCurrentProfile();
+                    Log.v("facebook - profile", profile.getFirstName());
+                }
 
+                progress.dismiss();
+
+                Intent intent = new Intent(context, MyLibraryActivity.class);
+                PreferencesHelper.setStringByKey(context, "Auth-Token", "5975f95b-3f52-4d27-9e76-5d5a6575ba8a");
                 startActivity(intent);
             }else{
+                progress.dismiss();
                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
             }
         }

@@ -3,6 +3,7 @@ package hu.rka.talkfollow;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.AccessToken;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -44,14 +43,11 @@ public class MyProfileActivity extends AppCompatActivity {
     String description;
     private SpiceManager spiceManager = new SpiceManager(ContentSpiceService.class);
     Dialog aboutMeDialog;
-    AccessToken accessToken;
-
-
     @Bind(R.id.profile_pic)
     ImageView profilePic;
     @Bind(R.id.book_number)
     TextView bookNumView;
-    @Bind(R.id.book_finished) TextView bookFinished;
+    @Nullable@Bind(R.id.book_finished) TextView bookFinished;
     @Bind(R.id.about_me) TextView aboutMe;
 
 
@@ -65,8 +61,8 @@ public class MyProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("My Profile");
-        /*Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
+        //Bundle bundle = getIntent().getExtras();
+        /*if(bundle!=null){
             bookNum = bundle.getInt("booknum");
             if(bookNum!=0){
                 bookNumView.setText("Number of books: " + bookNum);
@@ -77,15 +73,10 @@ public class MyProfileActivity extends AppCompatActivity {
         }
         aboutMe.setText("Short introduction about me...");
         */
-        accessToken = AccessToken.getCurrentAccessToken();
 
         GetMyProfileRequest getDataRequest = new GetMyProfileRequest();
         spiceManager.execute(getDataRequest, new DataRequestListener());
-
-
     }
-
-
 
     public final class DataRequestListener implements
             RequestListener<MyProfileResult> {
@@ -99,11 +90,12 @@ public class MyProfileActivity extends AppCompatActivity {
         public void onRequestSuccess(MyProfileResult result) {
 
             Toast.makeText(context, "Hello Adat!", Toast.LENGTH_LONG).show();
-            Picasso.with(context).load(result.getPicture()).placeholder(R.drawable.profilepic).into(profilePic);
+            if(result.getPicture()!=null) {
+                Picasso.with(context).load(result.getPicture()).placeholder(R.drawable.profilepic).into(profilePic);
+            }
             bookNumView.setText("Number of books: " + result.getBooks_number());
             bookFinished.setText("Finished: " + result.getFinished());
             aboutMe.setText(result.getAbout_me());
-            Picasso.with(context).load("https://graph.facebook.com/" + accessToken.getUserId()+ "/picture?type=large").into(profilePic);
 
         }
     }

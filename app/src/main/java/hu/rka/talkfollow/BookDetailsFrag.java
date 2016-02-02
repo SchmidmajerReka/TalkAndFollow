@@ -215,10 +215,22 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 pagenumDetails.setVisibility(View.VISIBLE);
                 bookmark.setText("0");
                 myRating.setVisibility(View.VISIBLE);
+                /*myRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        if (fromUser) {
+                            UploadRating uploadRating = new UploadRating(bookDetail.getId(), myRating.getRating());
+                            PostRatingRequest postRatingRequest = new PostRatingRequest(uploadRating);
+                            spiceManager.execute(postRatingRequest, new PostRatingListener());
+                        }
+                    }
+                });*/
+
                 editBookmark.setOnClickListener(editBookmarkClick);
                 bookFinished.setVisibility(View.VISIBLE);
                 visibilityText.setVisibility(View.VISIBLE);
                 visibility.setVisibility(View.VISIBLE);
+                //visibility.setOnClickListener(checkBoxClick);
                 Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
 
 
@@ -249,11 +261,17 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
             Toast.makeText(context, "Edit number", Toast.LENGTH_LONG).show();
             UploadBookmark uploadBookmark = new UploadBookmark();
             final EditText editText = (EditText) bookmarkDialog.findViewById(R.id.edit_bookmark);
-            bookmarktmp = Integer.valueOf(String.valueOf(editText.getText()));
-            uploadBookmark.setBookmark(bookmarktmp);
-            PostBookmarkRequest postBookmarkRequest = new PostBookmarkRequest(uploadBookmark);
-            spiceManager.execute(postBookmarkRequest, new BookmarkRequestListener());
-            bookmarkDialog.dismiss();
+            if(!String.valueOf(editText.getText()).equals("")) {
+                if (Integer.valueOf(String.valueOf(editText.getText())) != null) {
+                    bookmarktmp = Integer.valueOf(String.valueOf(editText.getText()));
+                    uploadBookmark.setBookmark(bookmarktmp);
+                    PostBookmarkRequest postBookmarkRequest = new PostBookmarkRequest(uploadBookmark);
+                    spiceManager.execute(postBookmarkRequest, new BookmarkRequestListener());
+                    bookmarkDialog.dismiss();
+                }
+            }else{
+                Toast.makeText(context, "Add a valid pagenumber or press back", Toast.LENGTH_LONG).show();
+            }
         }
     };
 

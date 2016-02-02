@@ -12,7 +12,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:numeric="integer"
-        android:text="Page number" />
+        android:hint="Page number" />
 
     <Button
         android:id="@+id/edit_bookmark_confirm"

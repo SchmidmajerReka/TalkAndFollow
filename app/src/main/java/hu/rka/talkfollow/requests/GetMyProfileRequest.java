@@ -12,6 +12,8 @@ import hu.rka.talkfollow.results.MyProfileResult;
  */
 public class GetMyProfileRequest  extends RetrofitSpiceRequest<MyProfileResult, ContentInterface> {
 
+
+
     public GetMyProfileRequest() {
         super(MyProfileResult.class, ContentInterface.class);
     }

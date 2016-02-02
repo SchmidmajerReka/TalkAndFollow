@@ -5,8 +5,13 @@ package hu.rka.talkfollow.results;
  */
 public class UserResult {
 
-    String msg = "";
+    String error;
+    String msg;
     String token;
+
+    public String getError() {
+        return error;
+    }
 
     public String getMsg() {
         return msg;
@@ -16,5 +21,11 @@ public class UserResult {
         return token;
     }
 
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
