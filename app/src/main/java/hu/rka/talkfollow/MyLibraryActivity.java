@@ -149,6 +149,13 @@ public class MyLibraryActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        GetMyLibraryRequest getMyLibraryRequest = new GetMyLibraryRequest();
+        spiceManager.execute(getMyLibraryRequest, new myLibraryListener());
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         LoginManager.getInstance().logOut();
         this.finish();

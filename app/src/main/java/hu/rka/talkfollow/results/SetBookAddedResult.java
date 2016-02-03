@@ -12,7 +12,7 @@ import hu.rka.talkfollow.models.Readers;
  */
 public class SetBookAddedResult {
 
-    String msg="";
+    String error="";
 
     Book book_details;
     ArrayList<Critic> critics;
@@ -20,8 +20,8 @@ public class SetBookAddedResult {
     ArrayList<ForumMessage> forum_messages;
 
 
-    public String getMsg() {
-        return msg;
+    public String getError() {
+        return error;
     }
 
     public Book getBook_details() {

@@ -42,7 +42,7 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
 
 
         return new RestAdapter.Builder()
-                .setEndpoint("http://talkandfollow.konstruktor.hu/api/v1")
+                .setEndpoint("http://192.168.50.100:3000/api/v1")
                 .setClient(new TimeoutUrlConnection())
                 .setRequestInterceptor(requestInterceptor);
     }

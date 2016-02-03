@@ -64,9 +64,11 @@ public class Book {
 
     public String getAuthors() {
         if(authors!=null) {
-            String authorInfo = authors.get(0);
-            if (authors.size() > 1) {
-                for (int i = 1; i < authors.size() - 1; i++) {
+            String authorInfo = "";
+            if(authors.size()==1) {
+               authorInfo = authors.get(0);
+            }else if (authors.size() > 1) {
+                for (int i = 0; i < authors.size() - 1; i++) {
                     authorInfo = authorInfo + ", " + authors.get(i);
                 }
                 authorInfo = authorInfo + ", " + authors.get(authors.size() - 1);

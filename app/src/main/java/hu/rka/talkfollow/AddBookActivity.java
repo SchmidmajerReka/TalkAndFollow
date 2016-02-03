@@ -126,6 +126,7 @@ public class AddBookActivity extends AppCompatActivity {
     public final class SearchRequestListener implements RequestListener<SearchResult>{
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            helpText.setVisibility(View.VISIBLE);
             Toast.makeText(context, "Hiba", Toast.LENGTH_LONG).show();
             helpText.setText("No book found");
             ArrayList<Book> empty = new ArrayList<>();
@@ -134,7 +135,7 @@ public class AddBookActivity extends AppCompatActivity {
 
         @Override
         public void onRequestSuccess(SearchResult searchResult) {
-            helpText.setText("");
+            helpText.setVisibility(View.GONE);
             ArrayList<Book> itemstmp = searchResult.getItems();
             if (itemstmp != null) {
                 bookAdapter.setBook(itemstmp, false);
@@ -180,6 +181,7 @@ public class AddBookActivity extends AppCompatActivity {
                 Log.d("MainActivity", "Scanned");
                 GetSearchResultRequest getSearchRequest = new GetSearchResultRequest(result.getContents());
                 spiceManager.execute(getSearchRequest, new SearchRequestListener());
+                helpText.setVisibility(View.VISIBLE);
                 helpText.setText("Since ISBN numbers are country specific, there is a chance that the book you are looking for is not available on that language. you can try to find the book by author or title");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }

@@ -1,9 +1,13 @@
 package hu.rka.talkfollow;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -85,38 +89,38 @@ public class LoginActivity extends AppCompatActivity {
         final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile");
 
+        if(isOnline()) {
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                accessToken = loginResult.getAccessToken();
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    accessToken = loginResult.getAccessToken();
 
-                if(Profile.getCurrentProfile() == null) {
-                    mProfileTracker = new ProfileTracker() {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                            Log.v("facebook - profile", profile2.getFirstName());
-                            mProfileTracker.stopTracking();
+                    if (Profile.getCurrentProfile() == null) {
+                        mProfileTracker = new ProfileTracker() {
+                            @Override
+                            protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                                Log.v("facebook - profile", profile2.getFirstName());
+                                mProfileTracker.stopTracking();
 
-                            progress = new ProgressDialog(context);
-                            progress.setTitle("Loading your profile");
-                            progress.setMessage("Please wait!");
-                            progress.setCancelable(false);
-                            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                            progress.show();
+                                progress = new ProgressDialog(context);
+                                progress.setTitle("Loading your profile");
+                                progress.setMessage("Please wait!");
+                                progress.setCancelable(false);
+                                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                progress.show();
 
 
-                            UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(),Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
-                            PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
-                            spiceManager.execute(postUserRequest, new LoginRequestListener());
-                        }
-                    };
-                    mProfileTracker.startTracking();
-                }
-                else {
-                    Profile profile = Profile.getCurrentProfile();
-                    Log.v("facebook - profile", profile.getFirstName());
-                }
+                                UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(), Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
+                                PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
+                                spiceManager.execute(postUserRequest, new LoginRequestListener());
+                            }
+                        };
+                        mProfileTracker.startTracking();
+                    } else {
+                        Profile profile = Profile.getCurrentProfile();
+                        Log.v("facebook - profile", profile.getFirstName());
+                    }
                 /*GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -136,19 +140,45 @@ public class LoginActivity extends AppCompatActivity {
                 parameters.putString("fields", "id,name,email,about_me");
                 request.setParameters(parameters);
                 request.executeAsync();*/
-            }
+                }
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(context, "Login Canceld", Toast.LENGTH_LONG).show();
-            }
+                @Override
+                public void onCancel() {
+                    Toast.makeText(context, "Login Canceld", Toast.LENGTH_LONG).show();
+                }
 
-            @Override
-            public void onError(FacebookException exception) {
-                Toast.makeText(context, "Login failed: " + String.valueOf(exception), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onError(FacebookException exception) {
+                    Toast.makeText(context, "Login failed: " + String.valueOf(exception), Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+            // set title
+            alertDialogBuilder.setTitle("No Internet Connection");
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage("The application needs internet connection. Connect to the internet and try again")
+                    .setCancelable(false)
+                    .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                           dialog.dismiss();
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            // show it
+            alertDialog.show();
+            Toast.makeText(context, "Nincs internet kapcsolat!!!!", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 
@@ -166,9 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                 UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(), Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
                 PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
                 spiceManager.execute(postUserRequest, new LoginRequestListener());
-
             }
-
         }
     }
 
@@ -205,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
                 progress.dismiss();
 
                 Intent intent = new Intent(context, MyLibraryActivity.class);
-                PreferencesHelper.setStringByKey(context, "Auth-Token", "5975f95b-3f52-4d27-9e76-5d5a6575ba8a");
+                PreferencesHelper.setStringByKey(context, "Auth-Token", "f72a6a7b-ac00-4e4d-86c8-3604c7ba8c8f");
                 startActivity(intent);
             }else{
                 progress.dismiss();
@@ -235,6 +263,76 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+
+        final LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("public_profile");
+        if (isOnline()){
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    accessToken = loginResult.getAccessToken();
+
+                    if (Profile.getCurrentProfile() == null) {
+                        mProfileTracker = new ProfileTracker() {
+                            @Override
+                            protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                                Log.v("facebook - profile", profile2.getFirstName());
+                                mProfileTracker.stopTracking();
+
+                                progress = new ProgressDialog(context);
+                                progress.setTitle("Loading your profile");
+                                progress.setMessage("Please wait!");
+                                progress.setCancelable(false);
+                                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                progress.show();
+
+
+                                UploadUser uploadUser = new UploadUser(AccessToken.getCurrentAccessToken().getUserId(), Profile.getCurrentProfile().getFirstName(), Profile.getCurrentProfile().getLastName());
+                                PostUserRequest postUserRequest = new PostUserRequest(uploadUser);
+                                spiceManager.execute(postUserRequest, new LoginRequestListener());
+                            }
+                        };
+                        mProfileTracker.startTracking();
+                    } else {
+                        Profile profile = Profile.getCurrentProfile();
+                        Log.v("facebook - profile", profile.getFirstName());
+                    }
+                /*GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                try {
+                                    String name = object.getString("name");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.v("LoginActivity", response.toString());
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,about_me");
+                request.setParameters(parameters);
+                request.executeAsync();*/
+                }
+
+                @Override
+                public void onCancel() {
+                    Toast.makeText(context, "Login Canceld", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    Toast.makeText(context, "Login failed: " + String.valueOf(exception), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        super.onResume();
+    }
 
     @Override
     protected void onStop() {

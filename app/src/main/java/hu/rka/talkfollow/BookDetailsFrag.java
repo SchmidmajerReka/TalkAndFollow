@@ -1,8 +1,12 @@
 package hu.rka.talkfollow;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -34,6 +38,7 @@ import hu.rka.talkfollow.models.UploadBookmark;
 import hu.rka.talkfollow.models.UploadRating;
 import hu.rka.talkfollow.models.UploadVisibility;
 import hu.rka.talkfollow.network.ContentSpiceService;
+import hu.rka.talkfollow.requests.GetAddBookRequest;
 import hu.rka.talkfollow.requests.PostBookAddRequest;
 import hu.rka.talkfollow.requests.PostBookReadRequest;
 import hu.rka.talkfollow.requests.PostBookmarkRequest;
@@ -87,6 +92,8 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         return v;
     }
+
+
 
     public void refreshUI(Book bookDetail) {
         setUI(bookDetail);
@@ -186,8 +193,11 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
         @Override
         public void onClick(View v) {
             UploadBookAdd uploadBookAdd = new UploadBookAdd(bookDetail.getMolyid());
-            PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
-            spiceManager.execute(postBookAddRequest, new AddRequestListener());
+            //PostBookAddRequest postBookAddRequest = new PostBookAddRequest(uploadBookAdd);
+            //spiceManager.execute(postBookAddRequest, new AddRequestListener());
+            GetAddBookRequest getAddBookRequest = new GetAddBookRequest(bookDetail.getMolyid());
+            spiceManager.execute(getAddBookRequest, new AddRequestListener());
+
         }
     };
 
@@ -196,14 +206,34 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
+            if(!activity.isOnline()){
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+                // set title
+                alertDialogBuilder.setTitle("Adding to library failed! No Internet Connection");
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("The application needs internet connection. Connect to the internet and try again")
+                        .setCancelable(false)
+                        .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+            }else {
+                Toast.makeText(context, "Adding failed! Network Error!", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
         public void onRequestSuccess(SetBookAddedResult result) {
 
 
-            if(result.getMsg().equals("")){
+            if(result.getError().equals("")){
                 bookDetail.setMine(true);
                 bookDetail = result.getBook_details();
                 activity.setBookDetails(result.getBook_details());
@@ -233,10 +263,8 @@ public class BookDetailsFrag extends android.support.v4.app.Fragment {
                 //visibility.setOnClickListener(checkBoxClick);
                 Toast.makeText(context, "Added to library", Toast.LENGTH_LONG).show();
 
-
-
             }else{
-                Toast.makeText(context, "Error: " + result.getMsg(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Error: " + result.getError(), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -1,20 +1,52 @@
 package hu.rka.talkfollow.network;
 
 
+import hu.rka.talkfollow.models.UploadBookAdd;
+import hu.rka.talkfollow.models.UploadBookRead;
+import hu.rka.talkfollow.models.UploadBookmark;
+import hu.rka.talkfollow.models.UploadDeleteCritic;
+import hu.rka.talkfollow.models.UploadEditCritic;
+import hu.rka.talkfollow.models.UploadForumMessage;
+import hu.rka.talkfollow.models.UploadNewCritic;
+import hu.rka.talkfollow.models.UploadProfile;
+import hu.rka.talkfollow.models.UploadRating;
+import hu.rka.talkfollow.models.UploadReport;
+import hu.rka.talkfollow.models.UploadUser;
+import hu.rka.talkfollow.models.UploadVisibility;
+import hu.rka.talkfollow.models.UploadVote;
+import hu.rka.talkfollow.results.BestSellerResult;
+import hu.rka.talkfollow.results.DeleteCriticResult;
+import hu.rka.talkfollow.results.DetailsResult;
+import hu.rka.talkfollow.results.EditBookmarkResult;
+import hu.rka.talkfollow.results.EditCriticResult;
+import hu.rka.talkfollow.results.EditProfileResult;
+import hu.rka.talkfollow.results.EditRatingResult;
+import hu.rka.talkfollow.results.ForumMessageResult;
+import hu.rka.talkfollow.results.MyLibraryResult;
+import hu.rka.talkfollow.results.MyProfileResult;
+import hu.rka.talkfollow.results.NewCriticResult;
+import hu.rka.talkfollow.results.ReportResult;
+import hu.rka.talkfollow.results.SearchResult;
+import hu.rka.talkfollow.results.SetBookAddedResult;
+import hu.rka.talkfollow.results.SetBookReadResult;
+import hu.rka.talkfollow.results.SetVisibilityResult;
+import hu.rka.talkfollow.results.UserResult;
+import hu.rka.talkfollow.results.VoteResult;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Created by Réka on 2016.01.13..
  */
 public interface ContentInterface {
 
-    @GET("/MyLibrary.json")
+    @GET("/mylibrary")
     MyLibraryResult getMyLibrary();
 
-    @GET("/MyProfile.json")
+    @GET("/user_profile")
     MyProfileResult getMyProfile();
 
     @GET("/{molyid}.json")
@@ -23,8 +55,12 @@ public interface ContentInterface {
     @GET("/BestSellerList.json")
     BestSellerResult getBestSellers();
 
-    @GET("/{search}.json")
-    SearchResult getSearchResult(@Path("search") String expression);
+    @GET("/search")
+    SearchResult getSearchResult(@Query("search") String expression);
+
+    //login
+    @POST("/login")
+    UserResult login(@Body UploadUser uploadUser);
 
     //edit_user
     @POST("/MyLibrary.json")
@@ -41,6 +77,10 @@ public interface ContentInterface {
     //book_show_user
     @POST("/MyLibrary.json")
     SetVisibilityResult setVisibility(@Body UploadVisibility uploadVisibility);
+
+    //getes_add_book
+    @GET("/add_book_to_my_library")
+    SetBookAddedResult getAddBook(@Query("moly_id") int molyid);
 
     //add_book
     @POST("/MyLibrary.json")
@@ -74,8 +114,6 @@ public interface ContentInterface {
     @POST("/MyLibrary.json")
     ForumMessageResult writeMessage(@Body UploadForumMessage uploadForumMessage);
 
-    //login
-    @POST("/MyLibrary.json")
-    UserResult login(@Body UploadUser uploadUser);
+
 
 }

@@ -58,7 +58,10 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         Book book = books.get(position);
 
-        Picasso.with(context).load(book.getPicture()).placeholder(R.drawable.profilepic).into(holder.cover);
+
+        if((book.getPicture() != null) && !(book.getPicture().equals(""))) {
+            Picasso.with(context).load(book.getPicture()).placeholder(R.drawable.profilepic).into(holder.cover);
+        }
 
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthors());

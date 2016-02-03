@@ -3,6 +3,8 @@ package hu.rka.talkfollow;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,7 +55,6 @@ public class TabMenuActivity extends AppCompatActivity {
     TabPagerAdapter pagerAdapter;
     Menu menu;
     int starter;
-    private static Handler handler;
     private ProgressDialog progress;
 
     TabLayout tabLayout;
@@ -73,6 +74,7 @@ public class TabMenuActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(bundle.getString("title"));
         getSupportActionBar().setSubtitle(bundle.getString("author"));
         bookDetail = new Book();
+        bookDetail.setMolyid(bundle.getInt("molyid"));
         critics = new ArrayList<>();
         readers = new ArrayList<>();
         messages = new ArrayList<>();
@@ -125,6 +127,8 @@ public class TabMenuActivity extends AppCompatActivity {
             }
         });
 
+
+
         GetDetailsRequest getDataRequest = new GetDetailsRequest(bundle.getInt("molyid"));
         spiceManager.execute(getDataRequest, new DataRequestListener());
 
@@ -135,8 +139,8 @@ public class TabMenuActivity extends AppCompatActivity {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            //handler.sendEmptyMessage(0);
-            finish();
+            progress.dismiss();
+            //finish();
             Toast.makeText(context, "Hiba történt!!", Toast.LENGTH_LONG).show();
         }
 
@@ -194,6 +198,15 @@ public class TabMenuActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
 
 
     public Book getBookDetails() {
