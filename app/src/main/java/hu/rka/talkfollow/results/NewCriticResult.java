@@ -1,14 +1,17 @@
 package hu.rka.talkfollow.results;
 
+import hu.rka.talkfollow.models.Critic;
+
 /**
  * Created by Réka on 2016.01.26..
  */
 public class NewCriticResult {
-    int critic_id = 7;
+
+    Critic critic;
     String msg = "";
 
-    public int getCritic_id() {
-        return critic_id;
+    public Critic getCritic() {
+        return critic;
     }
 
     public String getMsg() {

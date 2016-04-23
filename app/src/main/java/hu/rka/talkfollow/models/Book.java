@@ -1,12 +1,12 @@
 package hu.rka.talkfollow.models;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by Réka on 2016.01.08..
  */
 public class Book {
+
     int id;
     int moly_id;
     String title;
@@ -17,9 +17,10 @@ public class Book {
     boolean finished;
     float average_rating;
     float my_rating;
-    String descripton;
+    String description;
     int bookmark;
     boolean mine;
+    boolean visibility;
 
 
     public int getId() {
@@ -39,9 +40,9 @@ public class Book {
     }
 
     public String getTitle() {
-        if(subtitle!=null){
+        if (subtitle != null) {
             return title + ": " + subtitle;
-        }else{
+        } else {
             return title;
         }
     }
@@ -62,17 +63,40 @@ public class Book {
         this.picture = picture;
     }
 
+    public boolean isVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
+    }
+
     public String getAuthors() {
-        if(authors!=null) {
-            String authorInfo = authors.get(0);
+        if (authors != null && authors.size() > 0) {
+            String authorInfo = null;
+            if (authors.get(0) != null) {
+                authorInfo = authors.get(0);
+            }
             if (authors.size() > 1) {
                 for (int i = 1; i < authors.size() - 1; i++) {
-                    authorInfo = authorInfo + ", " + authors.get(i);
+                    if (authorInfo == null && authors.get(i) != null) {
+                        authorInfo = authors.get(i);
+                    } else {
+                        if (authors.get(i) != null) {
+                            authorInfo = authorInfo + ", " + authors.get(i);
+                        }
+                    }
                 }
-                authorInfo = authorInfo + ", " + authors.get(authors.size() - 1);
+                if (authorInfo != null && authors.get(authors.size() - 1) != null) {
+                    authorInfo = authorInfo + ", " + authors.get(authors.size() - 1);
+                } else {
+                    if (authorInfo == null && authors.get(authors.size() - 1) != null) {
+                        authorInfo = authors.get(authors.size() - 1);
+                    }
+                }
             }
             return authorInfo;
-        }else{
+        } else {
             return "Author Unknown";
         }
     }
@@ -82,16 +106,16 @@ public class Book {
     }
 
     public String getTags() {
-        if(tags!=null){
+        if (tags != null) {
             String allTags = tags.get(0);
-            if(tags.size()>1){
-                for (int i=1; i<tags.size()-1; i++) {
+            if (tags.size() > 1) {
+                for (int i = 1; i < tags.size() - 1; i++) {
                     allTags = allTags + ", " + tags.get(i);
                 }
-                allTags = allTags + ", " + tags.get(tags.size()-1);
+                allTags = allTags + ", " + tags.get(tags.size() - 1);
             }
             return allTags;
-        }else{
+        } else {
             return "";
         }
     }
@@ -125,11 +149,11 @@ public class Book {
     }
 
     public String getDescription() {
-        return descripton;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.descripton = description;
+        this.description = description;
     }
 
     public int getBookmark() {

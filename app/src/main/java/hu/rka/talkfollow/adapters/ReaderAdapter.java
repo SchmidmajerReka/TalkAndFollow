@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 
 import com.squareup.picasso.Picasso;
 
@@ -31,8 +31,8 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
     LayoutInflater inflater;
     Context context;
 
-    public ReaderAdapter(Context context, int resource){
-        super(context,resource);
+    public ReaderAdapter(Context context, int resource) {
+        super(context, resource);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
     }
@@ -53,9 +53,10 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
         Readers reader = readers.get(position);
+
         holder.name.setText(reader.getName());
         long bookAdded = reader.getBook_added();
-        String dateBookAdded = new SimpleDateFormat("dd/MM/yyyy").format(new Date(bookAdded));
+        String dateBookAdded = new SimpleDateFormat("dd/MM/yyyy").format(new Date(bookAdded * 1000));
         holder.readerTime.setText(dateBookAdded);
         holder.criticRating.setRating(reader.getRating());
         Picasso.with(context).load(reader.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.readerProfile);
@@ -68,12 +69,14 @@ public class ReaderAdapter extends ArrayAdapter<Readers> {
         notifyDataSetChanged();
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
+
         @Bind(R.id.reader_name)
         TextView name;
         @Bind(R.id.reader_profile_pic)
         ImageView readerProfile;
-        @Bind(R.id.reader_time) TextView readerTime;
+        @Bind(R.id.reader_time)
+        TextView readerTime;
         @Bind(R.id.reader_ratingBar)
         RatingBar criticRating;
 

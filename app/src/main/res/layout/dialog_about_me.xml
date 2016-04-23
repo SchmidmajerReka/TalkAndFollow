@@ -11,13 +11,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="Write introduction here..." />
+        android:hint="@string/edit_about_me_hint_introduction" />
 
     <Button
         android:id="@+id/edit_about_me_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="Ok"/>
+        android:text="@string/Ok"/>
 
 </LinearLayout>

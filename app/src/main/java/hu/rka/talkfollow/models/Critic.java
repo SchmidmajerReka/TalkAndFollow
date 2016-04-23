@@ -4,6 +4,7 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.09..
  */
 public class Critic {
+
     int id;
     String user_name;
     String title;
@@ -11,8 +12,8 @@ public class Critic {
     float rating;
     String user_picture;
     String time;
-    long created_at;
-    long updated_at;
+    Long created_at;
+    Long updated_at;
     boolean mine;
 
     public int getId() {
@@ -71,19 +72,19 @@ public class Critic {
         this.time = time;
     }
 
-    public long getCreated_at() {
+    public Long getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(long created_at) {
+    public void setCreated_at(Long created_at) {
         this.created_at = created_at;
     }
 
-    public long getUpdated_at() {
+    public Long getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(long updated_at) {
+    public void setUpdated_at(Long updated_at) {
         this.updated_at = updated_at;
     }
 

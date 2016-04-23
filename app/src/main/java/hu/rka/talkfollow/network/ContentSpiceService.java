@@ -16,7 +16,7 @@ import retrofit.client.UrlConnectionClient;
 /**
  * Created by Réka on 2016.01.13..
  */
-public class ContentSpiceService  extends RetrofitGsonSpiceService {
+public class ContentSpiceService extends RetrofitGsonSpiceService {
 
     private static Context context;
 
@@ -34,7 +34,7 @@ public class ContentSpiceService  extends RetrofitGsonSpiceService {
             @Override
             public void intercept(RequestFacade request) {
                 String token = PreferencesHelper.getStringByKey(context, "Auth-Token", "");
-                if(token != null && !token.equalsIgnoreCase("")){
+                if (token != null && !token.equalsIgnoreCase("")) {
                     request.addHeader("Auth-Token", token);
                 }
             }

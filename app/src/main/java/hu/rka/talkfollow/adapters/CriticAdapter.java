@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,12 +24,13 @@ import hu.rka.talkfollow.models.Critic;
  * Created by Réka on 2016.01.09..
  */
 public class CriticAdapter extends ArrayAdapter<Critic> {
+
     ArrayList<Critic> critics = new ArrayList<>();
     LayoutInflater inflater;
     Context context;
 
-    public  CriticAdapter(Context context, int resource){
-        super(context,resource);
+    public CriticAdapter(Context context, int resource) {
+        super(context, resource);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
     }
@@ -53,9 +56,12 @@ public class CriticAdapter extends ArrayAdapter<Critic> {
         holder.criticTitle.setText(critic.getTitle());
         holder.criticText.setText(critic.getCritic());
         holder.criticRating.setRating(critic.getRating());
-        if(critic.getTime()!=null){
-            holder.criticTime.setText(critic.getTime());
-        }else{
+
+        if (critic.getUpdated_at() != null) {
+            long created = critic.getUpdated_at();
+            String dateupdated = new SimpleDateFormat("dd/MM/yyyy").format(new Date(created));
+            holder.criticTime.setText(dateupdated);
+        } else {
             holder.criticTime.setText("");
         }
         Picasso.with(context).load(critic.getUser_picture()).placeholder(R.drawable.profilepic).into(holder.criticProfile);
@@ -68,15 +74,19 @@ public class CriticAdapter extends ArrayAdapter<Critic> {
         notifyDataSetChanged();
     }
 
-    static class ViewHolder{
-        @Bind(R.id.critic_author) TextView criticAuthor;
+    static class ViewHolder {
+        @Bind(R.id.critic_author)
+        TextView criticAuthor;
         @Bind(R.id.critic_profile_pic)
         ImageView criticProfile;
-        @Bind(R.id.critic_text) TextView criticText;
-        @Bind(R.id.critic_title) TextView criticTitle;
+        @Bind(R.id.critic_text)
+        TextView criticText;
+        @Bind(R.id.critic_title)
+        TextView criticTitle;
         @Bind(R.id.critic_ratingBar)
         RatingBar criticRating;
-        @Bind(R.id.critic_time) TextView criticTime;
+        @Bind(R.id.critic_time)
+        TextView criticTime;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

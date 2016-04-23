@@ -6,10 +6,10 @@ package hu.rka.talkfollow.models;
 public class UploadRating {
 
     int book_id;
-    float raiting;
+    float rating;
 
-    public UploadRating(int book_id, float raiting) {
+    public UploadRating(int book_id, float rating) {
         this.book_id = book_id;
-        this.raiting = raiting;
+        this.rating = rating;
     }
 }

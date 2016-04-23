@@ -2,8 +2,6 @@ package hu.rka.talkfollow.requests;
 
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
-import hu.rka.talkfollow.models.UploadDeleteCritic;
-import hu.rka.talkfollow.models.UploadEditCritic;
 import hu.rka.talkfollow.network.ContentInterface;
 import hu.rka.talkfollow.results.DeleteCriticResult;
 
@@ -12,15 +10,15 @@ import hu.rka.talkfollow.results.DeleteCriticResult;
  */
 public class PostDeleteCriticRequest extends RetrofitSpiceRequest<DeleteCriticResult, ContentInterface> {
 
-    UploadDeleteCritic uploadDeleteCritic;
+    int critic_id;
 
-    public PostDeleteCriticRequest(UploadDeleteCritic uploadDeleteCritic) {
+    public PostDeleteCriticRequest(int critic_id) {
         super(DeleteCriticResult.class, ContentInterface.class);
-        this.uploadDeleteCritic = uploadDeleteCritic;
+        this.critic_id = critic_id;
     }
 
     @Override
     public DeleteCriticResult loadDataFromNetwork() throws Exception {
-        return getService().deleteCritic(uploadDeleteCritic);
+        return getService().deleteCritic(critic_id);
     }
 }

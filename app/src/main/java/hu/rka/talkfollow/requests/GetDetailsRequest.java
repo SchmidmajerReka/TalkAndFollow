@@ -14,7 +14,7 @@ public class GetDetailsRequest extends RetrofitSpiceRequest<DetailsResult, Conte
 
     public GetDetailsRequest(int molyid) {
         super(DetailsResult.class, ContentInterface.class);
-        this.molyid=molyid;
+        this.molyid = molyid;
     }
 
     @Override

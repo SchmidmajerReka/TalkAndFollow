@@ -1,6 +1,5 @@
 package hu.rka.talkfollow.requests;
 
-import com.octo.android.robospice.request.listener.RequestProgressListener;
 import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 import hu.rka.talkfollow.models.UploadNewCritic;

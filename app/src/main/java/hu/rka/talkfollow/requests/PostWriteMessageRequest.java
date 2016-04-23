@@ -13,7 +13,7 @@ public class PostWriteMessageRequest extends RetrofitSpiceRequest<ForumMessageRe
 
     private UploadForumMessage uploadForumMessage;
 
-    public PostWriteMessageRequest( UploadForumMessage uploadForumMessage) {
+    public PostWriteMessageRequest(UploadForumMessage uploadForumMessage) {
         super(ForumMessageResult.class, ContentInterface.class);
         this.uploadForumMessage = uploadForumMessage;
     }

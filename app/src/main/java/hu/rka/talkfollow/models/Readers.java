@@ -4,12 +4,13 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.09..
  */
 public class Readers {
+
     int id;
     String name;
     long book_added;
     String user_picture;
     float rating;
-
+    Boolean me;
 
     public int getId() {
         return id;
@@ -49,5 +50,13 @@ public class Readers {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public Boolean getMe() {
+        return me;
+    }
+
+    public void setMe(Boolean me) {
+        this.me = me;
     }
 }

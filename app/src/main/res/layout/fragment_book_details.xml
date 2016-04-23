@@ -1,146 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
-
-        <ImageView
-            android:id="@+id/detail_cover"
-            android:layout_width="120dp"
-            android:layout_height="210dp"
-            android:layout_marginLeft="5dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bookcover"
-            />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-
-
-            <TextView
-                android:id="@+id/detail_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="16sp"
-                android:text="Tags: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                android:maxLines="3"
-                android:ellipsize="end"
-                />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/detail_pagenum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:visibility="visible">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingTop="10dp"
-                    android:textSize="16sp"
-                    android:text="Bookmark page:"/>
-
-                <TextView
-                    android:id="@+id/detail_bookmark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="25"/>
-
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
 
                 <ImageView
-                    android:id="@+id/edit_detail_bookmark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_edit_black_24dp"/>
+                    android:id="@+id/detail_cover"
+                    android:layout_width="120dp"
+                    android:layout_height="210dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bookcover" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/book_detail_tags_label"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/detail_tags"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:id="@+id/detail_pagenum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/book_detail_bookmark_page_text"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/detail_bookmark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp" />
+
+
+                        <ImageView
+                            android:id="@+id/edit_detail_bookmark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_edit_blue_24dp"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/detail_finished_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="20dp"
+                        android:text="@string/book_detail_book_finished_button_text"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/add_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/book_detail_add_to_library_button_text"
+                        android:visibility="visible" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/detail_visibility"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/detail_visibility_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/book_detail_visibility_label"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/detail_finished_button"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
-                android:visibility="gone"
-                android:text="BOOK FINISHED"/>
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <RatingBar
-                android:id="@+id/others_ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:isIndicator="true"
-                />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/add_button"
+                <RatingBar
+                    android:id="@+id/others_ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:visibility="invisible"
-                    android:text="Add to library" />
+                    android:isIndicator="true" />
 
                 <RatingBar
                     android:id="@+id/my_ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/detail_visibility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:checked="true"/>
-
-                <TextView
-                    android:id="@+id/detail_visibility_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="show me in readers' list"/>
             </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:textSize="16sp" />
         </LinearLayout>
-
-
-    </LinearLayout>
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/detail_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="16sp"
-            android:text="If you can't explain it simply you don't understand it well enough." />
 
     </ScrollView>
 

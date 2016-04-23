@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
@@ -21,21 +21,19 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
         <activity
-            android:name=".MyLibraryActivity"
+            android:name=".Activities.MyLibraryActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -43,11 +41,11 @@
                 <action android:name="android.intent.action.MAIN" />
 
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".WriteCriticActivity"
+            android:name=".Activities.WriteCriticActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -58,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CriticDetailsActivity"
+            android:name=".Activities.CriticDetailsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -69,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TabMenuActivity"
+            android:name=".Activities.TabMenuActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -80,7 +78,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddBookActivity"
+            android:name=".Activities.AddBookActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -91,7 +89,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".MyProfileActivity"
+            android:name=".Activities.MyProfileActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">

@@ -1,6 +1,5 @@
 package hu.rka.talkfollow.results;
 
-
 /**
  * Created by Réka on 2016.01.21..
  */
@@ -10,6 +9,7 @@ public class MyProfileResult {
     int books_number;
     int finished;
     String about_me;
+    String msg;
 
     public String getPicture() {
         return picture;
@@ -41,5 +41,9 @@ public class MyProfileResult {
 
     public void setAbout_me(String about_me) {
         this.about_me = about_me;
+    }
+
+    public String getMsg() {
+        return msg;
     }
 }

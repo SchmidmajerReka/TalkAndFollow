@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,37 +13,35 @@
             android:id="@+id/book_cover"
             android:layout_width="50dp"
             android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
-            android:src="@drawable/bookcover"/>
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/bookcover" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginLeft="8dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content">
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/book_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="Author"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/book_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:paddingTop="5dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="Title"/>
+                android:paddingTop="5dp"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -51,12 +50,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:textAlignment="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:visibility="invisible"
-            android:src="@drawable/ic_forum_black_36dp"
-            android:text="Chat"/>
+            android:src="@drawable/ic_forum_blue_36dp"
+            android:textAlignment="center"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

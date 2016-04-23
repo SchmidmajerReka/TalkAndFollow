@@ -9,7 +9,7 @@ import hu.rka.talkfollow.results.UserResult;
 /**
  * Created by Réka on 2016.01.28..
  */
-public class PostUserRequest extends RetrofitSpiceRequest <UserResult, ContentInterface> {
+public class PostUserRequest extends RetrofitSpiceRequest<UserResult, ContentInterface> {
 
     UploadUser uploadUser;
 

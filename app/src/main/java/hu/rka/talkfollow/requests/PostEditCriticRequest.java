@@ -9,7 +9,7 @@ import hu.rka.talkfollow.results.EditCriticResult;
 /**
  * Created by Réka on 2016.01.26..
  */
-public class PostEditCriticRequest extends RetrofitSpiceRequest <EditCriticResult, ContentInterface> {
+public class PostEditCriticRequest extends RetrofitSpiceRequest<EditCriticResult, ContentInterface> {
 
     UploadEditCritic uploadEditCritic;
 

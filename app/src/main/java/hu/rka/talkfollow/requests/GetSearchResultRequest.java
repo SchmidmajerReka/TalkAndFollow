@@ -14,7 +14,7 @@ public class GetSearchResultRequest extends RetrofitSpiceRequest<SearchResult, C
 
     public GetSearchResultRequest(String expression) {
         super(SearchResult.class, ContentInterface.class);
-        this.expression=expression;
+        this.expression = expression;
     }
 
     @Override

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".TabMenuActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".TabMenuActivity">
 
-    <item android:id="@+id/critic_send"
-        android:title="Send"
+    <item
+        android:id="@+id/critic_send"
+        android:title="@string/Send"
         app:showAsAction="always" />
 
 </menu>

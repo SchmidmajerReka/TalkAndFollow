@@ -4,6 +4,7 @@ package hu.rka.talkfollow.models;
  * Created by Réka on 2016.01.10..
  */
 public class ForumMessage {
+
     int id;
     String user_name; //name
     String message;

@@ -12,6 +12,7 @@ import hu.rka.talkfollow.models.Readers;
  */
 public class DetailsResult {
 
+    String msg;
     Book book_details;
     ArrayList<Critic> critics;
     ArrayList<Readers> readers;
@@ -33,4 +34,9 @@ public class DetailsResult {
     public ArrayList<ForumMessage> getForum_messages() {
         return forum_messages;
     }
+
+    public String getMsg() {
+        return msg;
+    }
+
 }

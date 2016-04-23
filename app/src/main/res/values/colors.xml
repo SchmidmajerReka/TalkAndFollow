@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="comment_background_dark">#3F51B5</color>
+    <color name="comment_background_light">#B3E5FC</color>
+    <color name="white_text_color">#FFFFFF</color>
+    <color name="black_text_color">#000000</color>
 </resources>

@@ -9,11 +9,11 @@ import hu.rka.talkfollow.models.Book;
  */
 public class MyLibraryResult {
 
-    String error;
+    String msg;
     ArrayList<Book> books;
 
-    public String getError() {
-        return error;
+    public String getMsg() {
+        return msg;
     }
 
     public ArrayList<Book> getBooks() {

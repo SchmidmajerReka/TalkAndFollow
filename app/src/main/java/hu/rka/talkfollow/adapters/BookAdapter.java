@@ -8,19 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import hu.rka.talkfollow.R;
-import hu.rka.talkfollow.TabMenuActivity;
+import hu.rka.talkfollow.Activities.TabMenuActivity;
 import hu.rka.talkfollow.models.Book;
 
 /**
@@ -37,7 +35,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
     public BookAdapter(Context c, int resource) {
         super(c, resource);
         inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        context=c;
+        context = c;
     }
 
     @Override
@@ -62,26 +60,26 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthors());
-        if(flag == true){
+        if (flag == true) {
             holder.forumIcon.setVisibility(View.VISIBLE);
             holder.forumIcon.setTag(position);
             holder.forumIcon.setOnClickListener(iconClick);
-        }else{
+        } else {
             holder.forumIcon.setVisibility(View.INVISIBLE);
         }
         return rowView;
     }
 
-    private View.OnClickListener iconClick=new View.OnClickListener(){
+    private View.OnClickListener iconClick = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
-            int position=(Integer)v.getTag();
+            int position = (Integer) v.getTag();
             Book book = books.get(position);
 
             Intent detailIntent = new Intent(context, TabMenuActivity.class);
             detailIntent.putExtra("molyid", book.getMolyid());
-            detailIntent.putExtra("added" ,true);
+            detailIntent.putExtra("added", true);
             detailIntent.putExtra("title", book.getTitle());
             detailIntent.putExtra("author", book.getAuthors());
             detailIntent.putExtra("starter", 3);
@@ -91,7 +89,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     public void setBook(ArrayList<Book> itemsArg, boolean flag) {
         books = itemsArg;
-        this.flag=flag;
+        this.flag = flag;
         notifyDataSetChanged();
     }
 
@@ -101,14 +99,17 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView author;
         @Bind(R.id.book_cover)
         ImageView cover;
-        @Bind(R.id.book_title) TextView title;
-        @Bind(R.id.forum_icon) ImageView forumIcon;
+        @Bind(R.id.book_title)
+        TextView title;
+        @Bind(R.id.forum_icon)
+        ImageView forumIcon;
+
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    public void orderAuthor(){
+    public void orderAuthor() {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {
@@ -119,7 +120,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         notifyDataSetChanged();
     }
 
-    public void orderTitle(){
+    public void orderTitle() {
         Collections.sort(books, new Comparator<Book>() {
             @Override
             public int compare(Book lhs, Book rhs) {

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".TabMenuActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".TabMenuActivity">
 
-    <item android:id="@+id/write_message"
+    <item
+        android:id="@+id/write_message"
         android:icon="@drawable/ic_write_message_white_36dp"
-        android:title="Message"
+        android:title="@string/message"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/refresh_messages"
+        android:title="@string/refresh"
         app:showAsAction="always" />
 </menu>

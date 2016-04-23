@@ -11,13 +11,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:text="Write your message here..." />
+        android:hint="@string/report_hint_write_message" />
 
     <Button
         android:id="@+id/send_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="Send"/>
+        android:text="@string/Send"/>
 
 </LinearLayout>
